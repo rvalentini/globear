@@ -7,8 +7,9 @@ A Clojure library designed to learn Chinese Vocabulary.
 ### Useful commands
 
 Update dependencies ```lein deps```  \
-Compile ClojureScript application ```lein cljsbuild auto dev``` \
-Run python server ```python -m SimpleHTTPServer 8080``` 
+~~Compile ClojureScript application ```lein cljsbuild auto dev```~~   
+~~Run python server ```python -m SimpleHTTPServer 8080```~~ \
+Compile & run ClojureScript application ```lein figwheel```
 
 ### TODO ###
 * Use core.async to to server synchronization? (~ redux reducers)
