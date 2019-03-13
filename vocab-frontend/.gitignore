@@ -11,3 +11,5 @@ pom.xml.asc
 .hg/
 .idea/
 **/public/javascripts/
+figwheel_server.log
+*.iml

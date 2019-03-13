@@ -10,6 +10,7 @@
                         :figwheel true
                         :compiler
                           {:optimizations :none             ;; advanced
+                           :externs ["externs.js"]
                            :output-to "resources/public/javascripts/dev.js"
                            :output-dir "resources/public/javascripts/cljs-dev/"
                            :pretty-print true
