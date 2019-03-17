@@ -23,7 +23,8 @@
 
   :dependencies [[org.clojure/clojure "1.8.0"]
                  [org.clojure/clojurescript "1.10.439"]
-                 [reagent "0.8.1"]])
+                 [reagent "0.8.1"]
+                 [hiccups "0.3.0"]])
 
 
 
