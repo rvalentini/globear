@@ -1,17 +1,31 @@
 .marker {
     background-image: url('bear.png');
     background-size: cover;
-    width: 50px;
-    height: 50px;
+    width: 40px;
+    height: 40px;
     border-radius: 50%;
     cursor: pointer;
 }
 
 .mapboxgl-popup {
-    max-width: 200px;
+    /*max-width: 200px; */
 }
 
 .mapboxgl-popup-content {
-    text-align: center;
-    font-family: 'Open Sans', sans-serif;
+    max-width: 630px;
+    max-height: 330px;
+    display:flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    justify-content: flex-start;
+    align-content: flex-start;
+    align-items: stretch;
+    overflow: auto;
 }
+
+.custom-popup-item {
+    margin: 2px;
+    width: 200px;
+    height: 100px;
+}
+

@@ -2,8 +2,7 @@
   (:require [reagent.core :as reagent]
             [vocab-frontend.map :as map]))
 
-;;TODO are externs actually necessary/working here?
-;;TODO how to interact with the leaflet map?
+
 ;;TODO rename application vocab -> ???
 
 (defonce app-state
