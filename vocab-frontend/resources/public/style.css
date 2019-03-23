@@ -12,20 +12,25 @@
 }
 
 .mapboxgl-popup-content {
-    max-width: 630px;
+    max-width: 550px;
     max-height: 330px;
     display:flex;
     flex-direction: row;
     flex-wrap: wrap;
-    justify-content: flex-start;
+    justify-content: space-between;
     align-content: flex-start;
-    align-items: stretch;
+    align-items: flex-start;
     overflow: auto;
 }
 
 .custom-popup-item {
     margin: 2px;
-    width: 200px;
+    /*width: 200px;*/
     height: 100px;
+    align-self: center;
+}
+
+.custom-popup-item:nth-child(4n) {
+    /*flex-basis: 100%;*/
 }
 

@@ -37,7 +37,7 @@
   (set! (.-accessToken js/mapboxgl) "pk.eyJ1Ijoicml2YWwiLCJhIjoiY2lxdWxpdHRqMDA0YWk3bTM1Mjc1dmVvYiJ9.uxBDzgwojTzU-Orq2AEUZA")
   (reset! map (new js/mapboxgl.Map (clj->js {:container "map" :style "mapbox://styles/rival/cjt705zrp0j781gn20szdi3y1" :center [-122.403944, 37.784020], :zoom 10.6})))
     (.addControl @map (new js/mapboxgl.NavigationControl))
-    (add-marker { :type "Feature" :geometry {:type "Point" :coordinates [-122.416629 37.787135]} :properties {:title "Mapbox" :description "blah" :pictures ["some_food.jpg" "bear.png" "some_food.jpg" "some_food.jpg" "some_food.jpg" "some_food.jpg" "some_food.jpg" "some_food.jpg"]}}))
+    (add-marker { :type "Feature" :geometry {:type "Point" :coordinates [-122.416629 37.787135]} :properties {:title "Mapbox" :description "blah" :pictures ["some_food.jpg" "bear.png" "some_food.jpg" "some_food.jpg" "some_food.jpg" "some_food.jpg" "some_food.jpg" "some_food.jpg" "some_food.jpg"]}}))
 
 
 (defn- map-render []
