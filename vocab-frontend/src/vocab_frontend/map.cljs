@@ -34,11 +34,17 @@
         (.addTo @map))))
 
 
-(defn- map-init []
+(defn- on-zoom []
+  (println (str "on-zoom-called: " (.getZoom @map))))
+
+
+(defn- map-init []  ;;TODO split init and config into separate methods
   (set! (.-accessToken js/mapboxgl) "pk.eyJ1Ijoicml2YWwiLCJhIjoiY2lxdWxpdHRqMDA0YWk3bTM1Mjc1dmVvYiJ9.uxBDzgwojTzU-Orq2AEUZA")
   (reset! map (new js/mapboxgl.Map (clj->js {:container "map" :style "mapbox://styles/rival/cjt705zrp0j781gn20szdi3y1" :center [103.865158 1.354875], :zoom 10.6})))
   (.addControl @map (new js/mapboxgl.NavigationControl))
-  (add-marker {:type "Feature" :geometry {:type "Point" :coordinates [103.865158 1.354875]} :properties {:title "Mapbox" :description "blah" :pictures test-resource/pics}}))
+  (add-marker {:type "Feature" :geometry {:type "Point" :coordinates [103.865158 1.354875]} :properties {:title "Mapbox" :description "blah" :pictures test-resource/pics}})
+  (.on @map "zoomstart" #(on-zoom)))
+
 
 
 (defn- map-render []
