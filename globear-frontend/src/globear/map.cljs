@@ -27,8 +27,8 @@
 
 (defn- build-mapbox-marker [marker-data]
   (-> {:type "Feature" :geometry {:type "Point" } :properties {:title "a" :description "b"}}
-      (assoc-in [:geometry :coordinates] [103.865158 1.354875]) ;;TODO use from marker
-      (assoc-in [:properties :pictures] test-resource/pics))) ;;TODO use from marker
+      (assoc-in [:geometry :coordinates] (:coordinates marker-data)) ;;TODO use from marker
+      (assoc-in [:properties :pictures] (:pictures marker-data)))) ;;TODO use from marker
 
 
 (defn add-marker-to-map [marker]
@@ -49,7 +49,8 @@
   (set! (.-accessToken js/mapboxgl) "pk.eyJ1Ijoicml2YWwiLCJhIjoiY2lxdWxpdHRqMDA0YWk3bTM1Mjc1dmVvYiJ9.uxBDzgwojTzU-Orq2AEUZA")
   (reset! map (new js/mapboxgl.Map (clj->js {:container "map" :style "mapbox://styles/rival/cjt705zrp0j781gn20szdi3y1" :center [103.865158 1.354875], :zoom 10.6})))
   (.addControl @map (new js/mapboxgl.NavigationControl))
-  (add-marker-to-map {:a "test" })  ;;TODO iterate over real markers
+  (add-marker-to-map {:coordinates [103.865158 1.354875] :pictures test-resource/pics })  ;;TODO iterate over real markers
+  (add-marker-to-map {:coordinates [103.722079 1.324356] :pictures test-resource/pics })  ;;TODO iterate over real markers
   (.on @map "zoomstart" #(on-zoom)))
 
 
