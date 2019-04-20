@@ -1,4 +1,4 @@
-(ns vocab-backend.core)
+(ns globear-backend.core)
 
 (defn handler [request]
   {:status 200
