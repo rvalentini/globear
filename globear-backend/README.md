@@ -7,10 +7,10 @@ marker locations and pictures for the globear-frontend application
 
 ### Local
 
-Run the following commands inside the REPL to run the Jetty adapter:\
-```(use 'ring.adapter.jetty) ``` \
-```(use 'globear-backend.core) ``` \
-```(run-jetty handler {:port 3000}) ``` 
+The app is using `compojure` and `lein-ring` plugin, 
+so to spin up a development web server just run
+
+`lein ring server`
 
 ## License
 

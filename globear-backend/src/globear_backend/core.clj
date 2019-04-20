@@ -1,6 +1,9 @@
-(ns globear-backend.core)
+(ns globear-backend.core
+  (:require
+    [compojure.core :refer :all]
+    [compojure.route :as route]))
 
-(defn handler [request]
-  {:status 200
-   :headers {"Content-Type" "text/html"}
-   :body "Hello World"})
+
+(defroutes app
+           (GET "/" [] "<h1> Hello World  !!!!</h1>")
+           (route/not-found "<h1>Page not found</h1>"))
