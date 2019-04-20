@@ -1,4 +1,4 @@
-(ns vocab-frontend.test-pics)
+(ns globear.test-pics)
 
 
 (def pics ["pictures/20141229_153649.jpg"

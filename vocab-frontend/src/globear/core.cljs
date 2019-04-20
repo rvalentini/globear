@@ -1,6 +1,6 @@
-(ns vocab-frontend.core
+(ns globear.core
   (:require [reagent.core :as reagent]
-            [vocab-frontend.map :as map]))
+            [globear.map :as map]))
 
 
 ;;TODO rename application vocab -> ???

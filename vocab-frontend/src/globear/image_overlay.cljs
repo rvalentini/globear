@@ -1,4 +1,4 @@
-(ns vocab-frontend.image-overlay)
+(ns globear.image-overlay)
 
 
 (defn close-image-overlay [state]

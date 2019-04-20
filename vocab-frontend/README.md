@@ -1,6 +1,8 @@
-# vocab-frontend
+# globear
 
-A Clojure library designed to learn Chinese Vocabulary.
+A Clojure map application based on mapbox.gl, 
+which is intended as travel-blog/photo album/foodie-guide. 
+Not sure yet what will come out in the end, but it surely will be 'beartastic' ;)
 
 ## Usage
 
@@ -13,17 +15,12 @@ Compile & run ClojureScript application ```lein figwheel```
 
 ### TODO ###
 * Use core.async to to server synchronization? (~ redux reducers)
-* design appropriate data structure to hold vocabulary items:
-    * character
-    * Pinyin
-    * translation
-    * last seen
-    * number of failures?
-    * number of times seen
+* come up with a reasonable data structure for markers and contained pictures
+* integrate 'foodie-guide' functionality
+* create marker reducers depending on the zoom-level 
 
 ## License
 
-Copyright © 2018 rival
+Copyright © 2019 rival
 
-Distributed under the Eclipse Public License either version 1.0 or (at
-your option) any later version.
+

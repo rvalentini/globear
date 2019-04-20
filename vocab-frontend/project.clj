@@ -1,10 +1,9 @@
-(defproject vocab-frontend "0.1.0-SNAPSHOT"
+(defproject globear "0.1.0-SNAPSHOT"
   :description "FIXME: write description"
   :url "http://example.com/FIXME"
   :license {:name "Eclipse Public License"
             :url "http://www.eclipse.org/legal/epl-v10.html"}
-  :main vocab-frontend.core
-
+  :main globear.core
   :cljsbuild {:builds [{:id "dev"
                         :source-paths ["src"]
                         :figwheel true

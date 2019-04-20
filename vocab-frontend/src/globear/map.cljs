@@ -1,8 +1,8 @@
-(ns vocab-frontend.map
+(ns globear.map
   (:require [reagent.core :as reagent]
             [hipo.core :as hipo]
-            [vocab-frontend.image-overlay :as img]
-            [vocab-frontend.test-pics :as test-resource]))
+            [globear.image-overlay :as img]
+            [globear.test-pics :as test-resource]))
 
 
 (def map (reagent/atom nil))
