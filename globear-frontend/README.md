@@ -17,7 +17,7 @@ Compile & run ClojureScript application ```lein figwheel```
 * Use core.async to to server synchronization? (~ redux reducers)
 * come up with a reasonable data structure for markers and contained pictures
 * integrate 'foodie-guide' functionality
-* create marker reducers depending on the zoom-level 
+* create marker reducers depending on the zoom-level (cluster markers)
 
 ## License
 
