@@ -3,8 +3,6 @@
             [globear.map :as map]))
 
 
-;;TODO rename application vocab -> ???
-
 (defonce app-state
     (reagent/atom
       {:message "This is a test string" }))

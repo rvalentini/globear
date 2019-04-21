@@ -1,6 +1,6 @@
-(ns vocab-frontend.core-test
+(ns globear.core-test
   (:require [clojure.test :refer :all]
-            [vocab-frontend.core :refer :all]))
+            [globear.core :refer :all]))
 
 (deftest a-test
   (testing "FIXME, I fail."

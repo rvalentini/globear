@@ -18,12 +18,15 @@
   :plugins [[lein-cljsbuild "1.1.7"]
             [lein-figwheel "0.5.17"]]
 
+  :source-paths ["src"]
+
   :figwheel {:css-dirs ["resources/public"]}
 
   :dependencies [[org.clojure/clojure "1.8.0"]
                  [org.clojure/clojurescript "1.10.439"]
                  [reagent "0.8.1"]
-                 [hipo "0.5.2"]])
+                 [hipo "0.5.2"]
+                 [org.clojure/core.async "0.4.490"]])
 
 
 
