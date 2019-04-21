@@ -1,0 +1,3 @@
+^{:css-dirs ["resources/public"]}
+^{:watch-dirs ["src"]}
+{:main globear.core}

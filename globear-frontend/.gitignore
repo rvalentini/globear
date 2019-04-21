@@ -13,3 +13,5 @@ pom.xml.asc
 **/public/javascripts/
 figwheel_server.log
 *.iml
+.rebel_readline_history
+

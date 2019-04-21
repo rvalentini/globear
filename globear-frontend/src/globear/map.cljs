@@ -2,7 +2,8 @@
   (:require [reagent.core :as reagent]
             [hipo.core :as hipo]
             [globear.picture-overlay :as img]
-            [globear.test-pics :as test-resource]))
+            [globear.test-pics :as test-resource]
+            [globear.messaging.channel :as channel]))
 
 
 (def map (reagent/atom nil))
@@ -42,7 +43,7 @@
 
 
 (defn- on-zoom []
-  (println (str "on-zoom-called: " (.getZoom @map))))
+  (channel/push-message (str "Oh-my-god-it-zooooomed: " (.getZoom @map))))
 
 
 (defn- map-init []
