@@ -10,9 +10,9 @@ Not sure yet what will come out in the end, but it surely will be 'beartastic' ;
 
 Update dependencies ```lein deps```  \
 Old version using `lein-figwheel`: \
-~~Compile ClojureScript application ```lein cljsbuild auto dev```~~   
+~~Compile ClojureScript application ```lein cljsbuild auto dev```~~ \  
 ~~Run python server ```python -m SimpleHTTPServer 8080```~~ \
-~Compile & run ClojureScript application ```lein figwheel``` ~~\~
+~~Compile & run ClojureScript application ```lein figwheel```~~ \
 
 New version using figwheel.main: \
 Run application with REPL: ```clojure -m figwheel.main --build globear --repl ``` \
