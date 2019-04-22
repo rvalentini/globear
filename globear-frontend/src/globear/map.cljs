@@ -3,7 +3,10 @@
             [hipo.core :as hipo]
             [globear.picture-overlay :as img]
             [globear.test-pics :as test-resource]
-            [globear.messaging.channel :as channel]))
+            [globear.messaging.channel :as channel]
+            [cljs.core.async
+             :as a
+             :refer [>! <! go chan buffer close! alts! timeout]]))
 
 
 (def map (reagent/atom nil))

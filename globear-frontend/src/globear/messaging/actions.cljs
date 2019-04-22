@@ -15,6 +15,7 @@
     (contains? actions (:action message))
     (contains? entities (:entity message))))
 
+;;TODO load test-marker via [cljs-http.client :as http]
 
 (defn execute [message]
   (if (is-message-valid? message)
