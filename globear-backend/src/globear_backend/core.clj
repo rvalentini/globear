@@ -3,10 +3,11 @@
     [compojure.core :refer :all]
     [compojure.route :as route]
     [ring.middleware.json :refer [wrap-json-response]]
+    [ring.middleware.cors :refer [wrap-cors]]
     [ring.util.response :refer [response]]))
 
 (defn- get-marker [id]
-  {:coordinates [114.162068 22.286001] :pictures ["pictures/20141229_153649.jpg"
+  {:coordinates [103.865158 1.354875] :pictures ["pictures/20141229_153649.jpg"
                               "pictures/20141229_193757.jpg"
                               "pictures/20141229_205946.jpg"
                               "pictures/20141229_214911.jpg"
@@ -20,12 +21,15 @@
                               "pictures/20141231_131014.jpg"]})
 
 (defroutes handler
-           (GET "/" [] "<h1> Hello   !!!!</h1>")
-           (GET "/marker" [] (response (get-marker nil))))                ;;TODO HATEOS -> should return all markers
-           (route/not-found "<h1>Page not found</h1>")
-
+           (GET "/" [] "<h1> Hello!!!!</h1>")
+           (GET "/marker" [] (response (get-marker nil)))        ;;TODO HATEOS -> should return all markers
+           (route/not-found "<h1>Page not found</h1>"))
 
 (def app
-  (wrap-json-response handler))
+  (-> handler
+      wrap-json-response
+      (wrap-cors :access-control-allow-origin [#".*"]
+                 :access-control-allow-methods [:get :put :post :delete])
+      ))
 
 
