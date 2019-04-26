@@ -5,26 +5,21 @@
             [globear.messaging.channel :as channels]
             [globear.messaging.actions :as actions]))
 
+;;TODO remove prints and add some nice doc string
 
 (defn request-worker []
+  (println "Starting request worker...")
   (go (while true
         (let [message (<! channels/request-chan)]
-          (go (actions/execute message))
-
-          ;;TODO check which type of server request -> DONE in actions
-          ;;TODO execute server request in new go block
-          ;;TODO write answer to response worker's queue
-          ))))
+          (println "Request worker picked up a message!")
+          (go (actions/execute message))))))
 
 
 (defn response-worker []
+  (println "Starting response worker...")
   (go (while true
         (let [message (<! channels/response-chan)]
-          (go (actions/execute message))
-          ;;TODO check which type of server request
-          ;;TODO execute server request in new go block
-          ;;TODO write answer to response worker's queue
-          ))))
-
+          (println "Response worker picked up a message!")
+          (go (actions/execute message))))))
 
 

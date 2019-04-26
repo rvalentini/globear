@@ -16,7 +16,6 @@
                  :src nil}))
 
 
-
 (defn- expand-picture [src]
   (swap! img-overlay-state assoc :src src)
   (swap! img-overlay-state assoc :visible true ))
@@ -50,11 +49,11 @@
 
 
 (defn- map-init []
+  (go (>! channel/request-chan {:action :DOWNLOAD :entity :MARKER}))
+  ;;TODO push maker request to request-chan to get all markers, not just test marker
   (set! (.-accessToken js/mapboxgl) "pk.eyJ1Ijoicml2YWwiLCJhIjoiY2lxdWxpdHRqMDA0YWk3bTM1Mjc1dmVvYiJ9.uxBDzgwojTzU-Orq2AEUZA")
   (reset! map (new js/mapboxgl.Map (clj->js {:container "map" :style "mapbox://styles/rival/cjt705zrp0j781gn20szdi3y1" :center [103.865158 1.354875], :zoom 10.6})))
   (.addControl @map (new js/mapboxgl.NavigationControl))
-  (add-marker-to-map {:coordinates [103.865158 1.354875] :pictures test-resource/pics })  ;;TODO iterate over real markers
-  (add-marker-to-map {:coordinates [103.722079 1.324356] :pictures test-resource/pics })  ;;TODO iterate over real markers
   (.on @map "zoomstart" #(on-zoom)))
 
 

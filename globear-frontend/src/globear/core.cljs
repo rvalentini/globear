@@ -1,6 +1,7 @@
 (ns globear.core
   (:require [reagent.core :as reagent]
-            [globear.map :as map]))
+            [globear.map :as map]
+            [globear.messaging.service :as service]))
 
 
 (defonce app-state
@@ -12,7 +13,12 @@
   (swap! app-state assoc :message "You clicked me :P"))
 
 
+(defn- app-init []
+  (service/request-worker)
+  (service/response-worker))
+
 (defn app []
+  (app-init)
   [map/map-component])
 
 
