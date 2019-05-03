@@ -51,6 +51,8 @@
 (defn- map-init []
   (go (>! channel/request-chan {:action :DOWNLOAD :entity :MARKER}))
   ;;TODO push maker request to request-chan to get all markers, not just test marker
+  (go (>! channel/request-chan {:action :DOWNLOAD :entity :PICTURE :id "20141230_123537"})) ;; WORKING :)
+  ;;TODO remove this dummy picture load and load at appropriate places
   (set! (.-accessToken js/mapboxgl) "pk.eyJ1Ijoicml2YWwiLCJhIjoiY2lxdWxpdHRqMDA0YWk3bTM1Mjc1dmVvYiJ9.uxBDzgwojTzU-Orq2AEUZA")
   (reset! map (new js/mapboxgl.Map (clj->js {:container "map" :style "mapbox://styles/rival/cjt705zrp0j781gn20szdi3y1" :center [103.865158 1.354875], :zoom 10.6})))
   (.addControl @map (new js/mapboxgl.NavigationControl))

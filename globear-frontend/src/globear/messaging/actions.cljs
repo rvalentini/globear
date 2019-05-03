@@ -18,10 +18,16 @@
     (contains? entities (:entity message))))
 
 
+(defn- download-picture-action [id]
+  (go (let [response (<! (http/get (str "http://localhost:3000/picture/" id)
+                                   {:with-credentials? false}))]
+        ;TODO write to response channel after download is finished and update picture state
+        ))
+  )
 
 ;;TODO this should be in a separate cljs donwload action file
-(defn- download-marker-action []
-  (go (let [response (<! (http/get "http://localhost:3000/marker"
+      (defn- download-marker-action []
+        (go (let [response (<! (http/get "http://localhost:3000/marker"
                                    {:with-credentials? false}))]
         (as-> response r
             (js->clj r)
@@ -38,7 +44,7 @@
 (defn- download [message]
   (case (:entity message)
     :MARKER (download-marker-action) ;;TODO give optional specific marker as parameter
-    :PICTURE (println "I should donwload some pictures!")
+    :PICTURE (download-picture-action (:id message))
     :THUMBNAIL(println "I should donwload some thumbnails!")))
 
 (defn- receive [message]
