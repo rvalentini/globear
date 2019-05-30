@@ -49,7 +49,7 @@
 
 
 (defn- map-init []
-  (go (>! channel/request-chan {:action :DOWNLOAD :entity :MARKER}))
+  (go (>! channel/request-chan {:action :DOWNLOAD :entity :MARKER :id "1"}))
   ;;TODO push maker request to request-chan to get all markers, not just test marker
   (go (>! channel/request-chan {:action :DOWNLOAD :entity :PICTURE :id "20141230_123537"})) ;; WORKING :)
   ;;TODO remove this dummy picture load and load at appropriate places

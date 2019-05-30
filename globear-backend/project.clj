@@ -13,4 +13,5 @@
   {:dev {:dependencies [[javax.servlet/servlet-api "2.5"]
                         [ring/ring-mock "0.3.2"]
                         [ring/ring-json "0.4.0"]
-                        [ring-cors "0.1.13"]]}})
+                        [ring-cors "0.1.13"]
+                        [cheshire "5.8.1"]]}})
