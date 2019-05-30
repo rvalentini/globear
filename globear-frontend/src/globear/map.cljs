@@ -4,10 +4,10 @@
             [globear.picture-overlay :as img]
             [globear.test-pics :as test-resource]
             [globear.messaging.channel :as channel]
+            [globear.model.picture-store :as picture-store]
             [cljs.core.async
              :as a
              :refer [>! <! go chan buffer close! alts! timeout]]))
-
 
 (def map (reagent/atom nil))
 
@@ -17,7 +17,7 @@
 
 
 (defn- expand-picture [src]
-  (swap! img-overlay-state assoc :src src)
+  (swap! img-overlay-state assoc :src (str "http://localhost:3000/pictures/" src)) ;;TODO make configurable
   (swap! img-overlay-state assoc :visible true ))
 
 
@@ -25,16 +25,23 @@
   (-> (new js/mapboxgl.Popup (clj->js {:offset 25}))
       (.setDOMContent
         (hipo/create [:div (for [src (aget marker "properties" "pictures")]
-                             [:img {:class "custom-popup-item" :src src :on-click #(expand-picture src)}])]))))
+                             [:img {:id src
+                                    :class "custom-popup-item"
+                                    :src "bear.png" ;TODO select better loading picture
+                                    :on-click #(expand-picture src)}])]))
+      ))
 
 
 (defn- build-mapbox-marker [marker-data]
   (-> {:type "Feature" :geometry {:type "Point" } :properties {:title "a" :description "b"}}
-      (assoc-in [:geometry :coordinates] (:coordinates marker-data)) ;;TODO use from marker
-      (assoc-in [:properties :pictures] (:pictures marker-data)))) ;;TODO use from marker
+      (assoc-in [:geometry :coordinates] (:coordinates marker-data))
+      (assoc-in [:properties :pictures] (:pictures marker-data))))
 
 
 (defn add-marker-to-map [marker]
+  ;;request each picture from the backend-server
+  (doseq [picture (:pictures marker)]
+    (go (>! channel/request-chan {:action :DOWNLOAD :entity :PICTURE :id picture})))
   (let [mapbox-marker (build-mapbox-marker marker)]
     (let [element (.createElement js/document "div") marker-js (clj->js mapbox-marker)]
       (set! (.-className element) "marker")
@@ -51,8 +58,6 @@
 (defn- map-init []
   (go (>! channel/request-chan {:action :DOWNLOAD :entity :MARKER :id "1"}))
   ;;TODO push maker request to request-chan to get all markers, not just test marker
-  (go (>! channel/request-chan {:action :DOWNLOAD :entity :PICTURE :id "20141230_123537"})) ;; WORKING :)
-  ;;TODO remove this dummy picture load and load at appropriate places
   (set! (.-accessToken js/mapboxgl) "pk.eyJ1Ijoicml2YWwiLCJhIjoiY2lxdWxpdHRqMDA0YWk3bTM1Mjc1dmVvYiJ9.uxBDzgwojTzU-Orq2AEUZA")
   (reset! map (new js/mapboxgl.Map (clj->js {:container "map" :style "mapbox://styles/rival/cjt705zrp0j781gn20szdi3y1" :center [103.865158 1.354875], :zoom 10.6})))
   (.addControl @map (new js/mapboxgl.NavigationControl))
