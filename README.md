@@ -1,2 +1,2 @@
-# vocab
-Clojure/Clojure Script application for learning Chinese vocabulary
+# globear
+A beartastic Clojure/Clojure Script application for traveling the world :D
