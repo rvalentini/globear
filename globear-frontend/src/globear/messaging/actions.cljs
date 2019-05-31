@@ -9,16 +9,32 @@
           (fn [x] [(:action x) (:entity x)]))
 
 
-(defmethod execute [:download :marker] [message]
-  (println message)
+(defn- get-all-markers [message]
+  (println "Requested all markers from backend")
+  (go (let [response (<! (http/get "http://localhost:3000/markers" {:with-credentials? false}))]
+        (as-> response r
+              (js->clj r)
+              (doseq [marker (:body r)]
+                (println (str "Marker " marker))
+                (>! channel/response-chan {:action :receive :entity :marker :payload marker}))))))
+
+
+(defn- get-single-marker [message]
+  (println "Requested marker from backed")
   (go (let [response (<! (http/get (str "http://localhost:3000/markers/" (:id message))
                                    {:with-credentials? false}))]
         (as-> response r
               (js->clj r)
               (>! channel/response-chan {:action :receive :entity :marker :payload (:body r)})))))
 
+(defmethod execute [:download :marker] [message]
+  (if (nil? (:id message))
+        (get-all-markers message)
+        (get-single-marker message)))
+
 
 (defmethod execute [:download :picture] [message]
+  (println "Requested picture from backend")
   (let [url (str "http://localhost:3000/pictures/" (:id message))] ;;TODO make configurable
     (go (let [response (<! (http/get url                    ;;response can be ignore, only actual resource download is relevant
                                      {:with-credentials? false}))]
@@ -41,7 +57,8 @@
                              (-> js/document
                                  (.getElementById (:id message))
                                  (.-src)
-                                 (set! (:url message))))))))))
+                                 (set! (:url message))))))
+                       10))))
 
 (defmethod execute [:receive :thumbnail] [message]
   ;;TODO implement

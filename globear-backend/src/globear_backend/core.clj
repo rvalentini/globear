@@ -60,3 +60,4 @@
 
 
 
+;;TODO include thumbnail generation for existing pictures

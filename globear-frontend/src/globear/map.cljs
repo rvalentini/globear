@@ -19,13 +19,14 @@
   (swap! img-overlay-state assoc :visible true ))
 
 
+;TODO fix image orientation in some cases
 (defn- build-picture-popup [marker]
   (-> (new js/mapboxgl.Popup (clj->js {:offset 25}))
       (.setDOMContent
         (hipo/create [:div (for [src (aget marker "properties" "pictures")]
                              [:img {:id src
                                     :class "custom-popup-item"
-                                    :src "bear.png" ;TODO select better loading picture
+                                    :src "totoro_loading.png"
                                     :on-click #(expand-picture src)}])]))
       ))
 
@@ -50,12 +51,12 @@
 
 
 (defn- on-zoom []
-  (channel/push-message (str "Oh-my-god-it-zooooomed: " (.getZoom @map))))
+  ;(channel/push-message (str "Oh-my-god-it-zooooomed: " (.getZoom @map)))
+  )
 
 
 (defn- map-init []
-  (go (>! channel/request-chan {:action :download :entity :marker :id "1"}))
-  ;;TODO push maker request to request-chan to get all markers, not just test marker
+  (go (>! channel/request-chan {:action :download :entity :marker}))
   (set! (.-accessToken js/mapboxgl) "pk.eyJ1Ijoicml2YWwiLCJhIjoiY2lxdWxpdHRqMDA0YWk3bTM1Mjc1dmVvYiJ9.uxBDzgwojTzU-Orq2AEUZA")
   (reset! map (new js/mapboxgl.Map (clj->js {:container "map" :style "mapbox://styles/rival/cjt705zrp0j781gn20szdi3y1" :center [103.865158 1.354875], :zoom 10.6})))
   (.addControl @map (new js/mapboxgl.NavigationControl))

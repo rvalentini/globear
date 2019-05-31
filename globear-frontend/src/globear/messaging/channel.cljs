@@ -20,14 +20,3 @@
 
 
 
-
-;;test-code below
-(def test-chan (chan))
-
-(go (while true
-      (println (<! test-chan))))
-
-(defn push-message [msg]
-  (go (>! test-chan msg)))
-
-

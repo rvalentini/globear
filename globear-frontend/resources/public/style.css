@@ -1,9 +1,8 @@
 .marker {
-    background-image: url('bear.png');
+    background-image: url('totoro.png');
     background-size: cover;
-    width: 40px;
+    width: 31px;
     height: 40px;
-    border-radius: 50%;
     cursor: pointer;
 }
 
