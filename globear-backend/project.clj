@@ -14,4 +14,5 @@
                         [ring/ring-mock "0.3.2"]
                         [ring/ring-json "0.4.0"]
                         [ring-cors "0.1.13"]
+                        [net.mikera/imagez "0.12.0"]
                         [cheshire "5.8.1"]]}})
