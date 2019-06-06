@@ -1,21 +1,9 @@
 (ns globear-backend.image.thumbnail
   (:require [mikera.image.core :as img]
-            [clojure.java.io :refer [file]])
-  (:import (java.awt.image BufferedImage)
-           (java.awt Color)))
+            [clojure.java.io :refer [file]]))
 
 
-(def height 100)
-
-(defn- remove-alpha [image]
-  (let [copy (BufferedImage. (img/width image) (img/height image) (BufferedImage/TYPE_INT_RGB))]
-    (let [graphics (.createGraphics copy)]
-      (.setColor graphics (Color/WHITE))
-      (.fillRect graphics 0 0 (.getWidth copy) (.getHeight copy))
-      (.drawImage graphics 0 0 nil)
-      (.dispose graphics)
-      copy)))
-
+(def height 150)
 
 (defn- load-image-from-file [id]
   (let [path (str "resources/pictures/" id ".jpg")]
@@ -24,13 +12,13 @@
 
 
 (defn- save-image-to-file [image id]
-  (let [path (str "resources/thumbnails/" id "_thumbnail.jpg")]
+  (let [path (str "resources/thumbnails/" id "_thumbnail.png")]
     (println "Saving thumbnail" path "to file")
-    (img/save image path)))
+    (img/save image path :quality 1.0 :progressive false)))
 
 
 (defn- resize-image
-  "Resized the given image to fixed a fixed height (defined above) and recalculates the heigh
+  "Resized the given image to fixed a fixed height (defined above) and recalculates the height
   to keep the image"
   [src-image]
   (println "Generating thumbnail...")
@@ -42,7 +30,6 @@
   (-> id
       (load-image-from-file)
       (resize-image)
-      (remove-alpha)
       (save-image-to-file id)))
 
 

@@ -9,7 +9,8 @@
     [ring.util.response :refer [response]]
     [clojure.java.io :as io]
     [cheshire.core :refer [parse-string]]
-    [globear-backend.image.thumbnail :as thumbnail]))
+    [globear-backend.image.thumbnail :as thumbnail]
+    [globear-backend.thumbnail-service :as service]))
 
 (def markers
   (let [raw-markers (parse-string
@@ -50,7 +51,8 @@
            (GET "/markers" [] (response (get-all-markers)))
            (GET "/markers/:id" [id] (get-marker id))
            (GET "/pictures/:id" [id] (get-picture id))
-           (GET "/test" [] (thumbnail/generate-thumbnail "20141223_134152"))
+           (GET "/test" [] (thumbnail/generate-thumbnail "20141229_153649"))
+           (GET "/test2" [] (service/generate-thumbnails))
            (route/not-found "<h1>Page not found</h1>"))
 
 (def app
