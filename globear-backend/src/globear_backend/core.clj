@@ -51,12 +51,22 @@
        :body    (io/input-stream path)}
       not-found)))
 
+(defn- get-thumbnail [id]
+  (let [path (str "resources/thumbnails/" id "_thumbnail.png")]
+    (if
+      (.exists (io/file path))
+      {:status  200
+       :headers {"Content-Type" "image/png"}
+       :body    (io/input-stream path)}
+      not-found)))
+
 
 (defroutes handler
            (GET "/" [] "<h1> Globear-backend says hallo!</h1>")
            (GET "/markers" [] (response (get-all-markers)))
            (GET "/markers/:id" [id] (get-marker id))
            (GET "/pictures/:id" [id] (get-picture id))
+           (GET "/thumbnails/:id" [id] (get-thumbnail id))
            (GET "/test" [] (thumbnail/generate-thumbnail "20141229_153649")) ;TODO remove
            (GET "/test2" [] (thumbnail-service/generate-all-thumbnails)) ;TODO remove
            (route/not-found "<h1>Page not found</h1>"))

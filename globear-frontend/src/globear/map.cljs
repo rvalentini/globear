@@ -15,6 +15,7 @@
 
 
 (defn- expand-picture [src]
+  ;TODO load resource via action
   (swap! img-overlay-state assoc :src (str "http://localhost:3000/pictures/" src)) ;;TODO make configurable
   (swap! img-overlay-state assoc :visible true ))
 
@@ -40,7 +41,7 @@
 (defn add-marker-to-map [marker]
   ;;request each picture from the backend-server
   (doseq [picture (:pictures marker)]
-    (go (>! channel/request-chan {:action :download :entity :picture :id picture})))
+    (go (>! channel/request-chan {:action :download :entity :thumbnail :id picture})))
   (let [mapbox-marker (build-mapbox-marker marker)]
     (let [element (.createElement js/document "div") marker-js (clj->js mapbox-marker)]
       (set! (.-className element) "marker")

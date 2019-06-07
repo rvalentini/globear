@@ -42,8 +42,12 @@
 
 
 (defmethod execute [:download :thumbnail] [message]
-  ;;TODO implement
-  )
+  (println "Requested thumbnail from backend")
+  (let [url (str "http://localhost:3000/thumbnails/" (:id message))] ;;TODO make configurable
+    (go (let [response (<! (http/get url                    ;;response can be ignore, only actual resource download is relevant
+                                     {:with-credentials? false}))]
+          (>! channel/response-chan {:action :receive :entity :thumbnail :id (:id message) :url url})))))
+
 
 
 (defmethod execute [:receive :picture] [message]
@@ -61,8 +65,18 @@
                        10))))
 
 (defmethod execute [:receive :thumbnail] [message]
-  ;;TODO implement
-  )
+  (let [interval (atom nil)]
+    (reset! interval (.setInterval
+                       js/window
+                       (fn []
+                         (when (some? (.getElementById js/document (:id message)))
+                           (do
+                             (.clearInterval js/window @interval)
+                             (-> js/document
+                                 (.getElementById (:id message))
+                                 (.-src)
+                                 (set! (:url message))))))
+                       10))))
 
 
 (defmethod execute [:receive :marker] [message]
