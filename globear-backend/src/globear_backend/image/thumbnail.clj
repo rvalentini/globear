@@ -27,6 +27,7 @@
 
 
 (defn generate-thumbnail [id]
+  (println (str "Generating thumbnail for " id))
   (-> id
       (load-image-from-file)
       (resize-image)

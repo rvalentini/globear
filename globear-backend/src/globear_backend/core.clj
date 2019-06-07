@@ -10,7 +10,13 @@
     [clojure.java.io :as io]
     [cheshire.core :refer [parse-string]]
     [globear-backend.image.thumbnail :as thumbnail]
-    [globear-backend.thumbnail-service :as service]))
+    [globear-backend.thumbnail-service :as thumbnail-service]))
+
+
+(defn- init []
+  (println "Booting globear-backend")
+  (println "Checking if there is a thumbnail for every image ...")
+  (thumbnail-service/generate-all-thumbnails))
 
 (def markers
   (let [raw-markers (parse-string
@@ -51,8 +57,8 @@
            (GET "/markers" [] (response (get-all-markers)))
            (GET "/markers/:id" [id] (get-marker id))
            (GET "/pictures/:id" [id] (get-picture id))
-           (GET "/test" [] (thumbnail/generate-thumbnail "20141229_153649"))
-           (GET "/test2" [] (service/generate-thumbnails))
+           (GET "/test" [] (thumbnail/generate-thumbnail "20141229_153649")) ;TODO remove
+           (GET "/test2" [] (thumbnail-service/generate-all-thumbnails)) ;TODO remove
            (route/not-found "<h1>Page not found</h1>"))
 
 (def app
@@ -63,5 +69,4 @@
                  :access-control-allow-methods [:get :put :post :delete])))
 
 
-
-;;TODO include thumbnail generation for existing pictures
+(init)
