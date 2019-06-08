@@ -47,7 +47,8 @@
     (if
       (.exists (io/file path))
       {:status  200
-       :headers {"Content-Type" "image/jpg"}
+       :headers {"Content-Type" "image/jpg"
+                 "Cache-Control" "max-age=31536000, private"}
        :body    (io/input-stream path)}
       not-found)))
 
@@ -56,7 +57,8 @@
     (if
       (.exists (io/file path))
       {:status  200
-       :headers {"Content-Type" "image/png"}
+       :headers {"Content-Type" "image/png"
+                 "Cache-Control" "max-age=31536000, private"}
        :body    (io/input-stream path)}
       not-found)))
 

@@ -36,7 +36,7 @@
 (defmethod execute [:download :picture] [message]
   (println "Requested picture from backend")
   (let [url (str "http://localhost:3000/pictures/" (:id message))] ;;TODO make configurable
-    (go (let [response (<! (http/get url                    ;;response can be ignore, only actual resource download is relevant
+    (go (let [_ (<! (http/get url
                                      {:with-credentials? false}))]
           (>! channel/response-chan {:action :receive :entity :picture :id (:id message) :url url})))))
 
@@ -44,7 +44,7 @@
 (defmethod execute [:download :thumbnail] [message]
   (println "Requested thumbnail from backend")
   (let [url (str "http://localhost:3000/thumbnails/" (:id message))] ;;TODO make configurable
-    (go (let [response (<! (http/get url                    ;;response can be ignore, only actual resource download is relevant
+    (go (let [_ (<! (http/get url
                                      {:with-credentials? false}))]
           (>! channel/response-chan {:action :receive :entity :thumbnail :id (:id message) :url url})))))
 
@@ -55,11 +55,11 @@
     (reset! interval (.setInterval
                        js/window
                        (fn []
-                         (when (some? (.getElementById js/document (:id message)))
+                         (when (some? (.getElementById js/document "img-overlay"))
                            (do
                              (.clearInterval js/window @interval)
                              (-> js/document
-                                 (.getElementById (:id message))
+                                 (.getElementById "img-overlay")
                                  (.-src)
                                  (set! (:url message))))))
                        10))))

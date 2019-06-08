@@ -4,19 +4,17 @@
             [globear.picture-overlay :as img]
             [globear.messaging.channel :as channel]
             [cljs.core.async
-             :as a
              :refer [>! <! go chan buffer close! alts! timeout]]))
 
-(def map (reagent/atom nil))
+(def globear-map (reagent/atom nil))
 
 (def img-overlay-state
-  (reagent/atom {:visible false
-                 :src nil}))
+  (reagent/atom {:visible false}))
 
 
 (defn- expand-picture [src]
   ;TODO load resource via action
-  (swap! img-overlay-state assoc :src (str "http://localhost:3000/pictures/" src)) ;;TODO make configurable
+  (go (>! channel/request-chan {:action :download :entity :picture :id src}))
   (swap! img-overlay-state assoc :visible true ))
 
 
@@ -28,8 +26,7 @@
                              [:img {:id src
                                     :class "custom-popup-item"
                                     :src "totoro_loading.png"
-                                    :on-click #(expand-picture src)}])]))
-      ))
+                                    :on-click #(expand-picture src)}])]))))
 
 
 (defn- build-mapbox-marker [marker-data]
@@ -48,7 +45,7 @@
       (-> (new js/mapboxgl.Marker element)
           (.setLngLat (aget marker-js "geometry" "coordinates"))
           (.setPopup (build-picture-popup marker-js))
-          (.addTo @map)))))
+          (.addTo @globear-map)))))
 
 
 (defn- on-zoom []
@@ -59,9 +56,9 @@
 (defn- map-init []
   (go (>! channel/request-chan {:action :download :entity :marker}))
   (set! (.-accessToken js/mapboxgl) "pk.eyJ1Ijoicml2YWwiLCJhIjoiY2lxdWxpdHRqMDA0YWk3bTM1Mjc1dmVvYiJ9.uxBDzgwojTzU-Orq2AEUZA")
-  (reset! map (new js/mapboxgl.Map (clj->js {:container "map" :style "mapbox://styles/rival/cjt705zrp0j781gn20szdi3y1" :center [103.865158 1.354875], :zoom 10.6})))
-  (.addControl @map (new js/mapboxgl.NavigationControl))
-  (.on @map "zoomstart" #(on-zoom)))
+  (reset! globear-map (new js/mapboxgl.Map (clj->js {:container "map" :style "mapbox://styles/rival/cjt705zrp0j781gn20szdi3y1" :center [103.865158 1.354875], :zoom 10.6})))
+  (.addControl @globear-map (new js/mapboxgl.NavigationControl))
+  (.on @globear-map "zoomstart" #(on-zoom)))
 
 
 

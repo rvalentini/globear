@@ -3,8 +3,8 @@ A beartastic Clojure/Clojure Script application for traveling the world :D
 
 ## TODO
 
-1. [Frontend] load large pircture on pop-up via actions
-2. [Frontend/Backend] make sure resources are cached properly
+1. ~~[Frontend] load large picture on pop-up via actions~~
+2. ~~[Frontend/Backend] make sure resources are cached properly~~
 3. [Frontend] introduce Cluster-Marker
 4. [Frontend/Backend] introduce basic auth
 5. [Backend] add more content
