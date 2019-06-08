@@ -5,7 +5,7 @@ A beartastic Clojure/Clojure Script application for traveling the world :D
 
 1. ~~[Frontend] load large picture on pop-up via actions~~
 2. ~~[Frontend/Backend] make sure resources are cached properly~~
-3. [Frontend] Correct picture orientations
+3. [Frontend] Correct picture orientations (try to parse meta-data using exif-processor)
 4. [Frontend] introduce Cluster-Marker
 5. [Frontend/Backend] introduce basic auth
 6. [Backend] add more content
