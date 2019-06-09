@@ -10,7 +10,9 @@
     [clojure.java.io :as io]
     [cheshire.core :refer [parse-string]]
     [globear-backend.image.thumbnail :as thumbnail]
-    [globear-backend.thumbnail-service :as thumbnail-service]))
+    [globear-backend.image.exif-extractor :as exif]
+    [globear-backend.thumbnail-service :as thumbnail-service]
+    [ring.middleware.basic-authentication :refer [wrap-basic-authentication]]))
 
 
 (defn- init []
@@ -44,6 +46,7 @@
 
 (defn- get-picture [id]
   (let [path (str "resources/pictures/" id ".jpg")]
+    (exif/extract-exif-meta-data (io/file path))
     (if
       (.exists (io/file path))
       {:status  200
@@ -62,6 +65,8 @@
        :body    (io/input-stream path)}
       not-found)))
 
+(defn- authenticated? [name pass]
+  (and (= name "bubu") (= pass "baba")))
 
 (defroutes handler
            (GET "/" [] "<h1> Globear-backend says hallo!</h1>")
@@ -77,8 +82,11 @@
   (-> handler
       wrap-json-response
       (wrap-file "resources/pictures/")
+      ;(wrap-basic-authentication authenticated?) ;TODO activate
       (wrap-cors :access-control-allow-origin [#".*"]
-                 :access-control-allow-methods [:get :put :post :delete])))
+                 :access-control-allow-methods [:get :put :post :delete]
+                 :WWW-Authenticate "Basic realm=\"Globear\"")
+      ))
 
 
 (init)

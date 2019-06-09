@@ -15,4 +15,6 @@
                         [ring/ring-json "0.4.0"]
                         [ring-cors "0.1.13"]
                         [net.mikera/imagez "0.12.0"]
-                        [cheshire "5.8.1"]]}})
+                        [cheshire "5.8.1"]
+                        [io.joshmiller/exif-processor "0.2.0"]
+                        [ring-basic-authentication "1.0.5"]]}})
