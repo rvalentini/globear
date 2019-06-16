@@ -13,12 +13,10 @@
 
 
 (defn- expand-picture [src]
-  ;TODO load resource via action
   (go (>! channel/request-chan {:action :download :entity :picture :id src}))
   (swap! img-overlay-state assoc :visible true ))
 
 
-;TODO fix image orientation in some cases
 (defn- build-picture-popup [marker]
   (-> (new js/mapboxgl.Popup (clj->js {:offset 25}))
       (.setDOMContent
