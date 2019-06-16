@@ -72,6 +72,7 @@
            (GET "/" [] "<h1> Globear-backend says hallo!</h1>")
            (GET "/markers" [] (response (get-all-markers)))
            (GET "/markers/:id" [id] (get-marker id))
+           (GET "/geojson" [] (io/input-stream "resources/markers/geojson_markers.json"))
            (GET "/pictures/:id" [id] (get-picture id))
            (GET "/thumbnails/:id" [id] (get-thumbnail id))
            (GET "/test" [] (thumbnail/generate-thumbnail "20141229_153649")) ;TODO remove

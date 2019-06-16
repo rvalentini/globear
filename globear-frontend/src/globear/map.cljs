@@ -49,6 +49,49 @@
 (defn- on-zoom []
   ;(channel/push-message (str "Oh-my-god-it-zooooomed: " (.getZoom @map)))
   )
+;;TODO experiment with cluster layers
+(defn- add-source []
+  )
+(defn- on-map-load []
+  (println "LOADED MAP")
+  (.addSource @globear-map "markers" (clj->js {:type "geojson"
+                                                :data "http://localhost:3000/geojson"
+                                                :cluster true
+                                                :clusterMaxZoom 14
+                                                :clusterRadius 50}) )
+  (.addLayer @globear-map (clj->js {:id "clusters"
+                                    :type "circle"
+                                    :source "markers"
+                                    :filter  ["has" "point_count"]
+                                    :paint {:circle-color ["step"
+                                                           ["get" "point_count"]
+                                                           "#51bbd6"
+                                                           100
+                                                           "#f1f075"
+                                                           750
+                                                           "#f28cb1"]
+                                            :circle-radius ["step"
+                                                            ["get" "point_count"]
+                                                            20
+                                                            100
+                                                            30
+                                                            750
+                                                            40]}}) )
+  (.addLayer @globear-map (clj->js {:id "cluster-count"
+                                    :type "symbol"
+                                    :source "markers"
+                                    :filter ["has" "point_count"]
+                                    :layout {:text-field "{point_count_abbreviated}"
+                                             :text-font ["DIN Offc Pro Medium" "Arial Unicode MS Bold"]
+                                             :text-size 12} }) )
+  (.addLayer @globear-map (clj->js {:id "unclustered-point"
+                                    :type "circle"
+                                    :source "markers"
+                                    :filter ["!" ["has" "point_count"]]
+                                    :paint {:circle-color "#11b4da"
+                                            :circle-radius 4
+                                            :circle-stroke-width 1
+                                            :circle-stroke-color "#fff"} }) ))
 
 
 (defn- map-init []
@@ -56,7 +99,9 @@
   (set! (.-accessToken js/mapboxgl) "pk.eyJ1Ijoicml2YWwiLCJhIjoiY2lxdWxpdHRqMDA0YWk3bTM1Mjc1dmVvYiJ9.uxBDzgwojTzU-Orq2AEUZA")
   (reset! globear-map (new js/mapboxgl.Map (clj->js {:container "map" :style "mapbox://styles/rival/cjt705zrp0j781gn20szdi3y1" :center [103.865158 1.354875], :zoom 10.6})))
   (.addControl @globear-map (new js/mapboxgl.NavigationControl))
-  (.on @globear-map "zoomstart" #(on-zoom)))
+  (.on @globear-map "zoomstart" #(on-zoom))
+  (.on @globear-map "load" #(on-map-load)))
+
 
 
 
