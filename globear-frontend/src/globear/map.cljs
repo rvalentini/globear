@@ -50,6 +50,10 @@
   ;(channel/push-message (str "Oh-my-god-it-zooooomed: " (.getZoom @map)))
   )
 ;;TODO experiment with cluster layers
+;;TODO make lowest zoom level use totoro
+;;TODO parse old marker info from within geojson
+;;TODO use cooler cluster icons (circle -> totoro holding sign?)x
+;;TODO make popup triggered by click on lowest symbol layer
 (defn- add-source []
   )
 (defn- on-map-load []
@@ -88,14 +92,14 @@
                                     :type "circle"
                                     :source "markers"
                                     :filter ["!" ["has" "point_count"]]
-                                    :paint {:circle-color "#11b4da"
-                                            :circle-radius 4
+                                    :paint {:circle-color "#FF0000"
+                                            :circle-radius 10
                                             :circle-stroke-width 1
                                             :circle-stroke-color "#fff"} }) ))
 
 
 (defn- map-init []
-  (go (>! channel/request-chan {:action :download :entity :marker}))
+  ;(go (>! channel/request-chan {:action :download :entity :marker}))  ;;TODO reintroduce logic in new layerd design
   (set! (.-accessToken js/mapboxgl) "pk.eyJ1Ijoicml2YWwiLCJhIjoiY2lxdWxpdHRqMDA0YWk3bTM1Mjc1dmVvYiJ9.uxBDzgwojTzU-Orq2AEUZA")
   (reset! globear-map (new js/mapboxgl.Map (clj->js {:container "map" :style "mapbox://styles/rival/cjt705zrp0j781gn20szdi3y1" :center [103.865158 1.354875], :zoom 10.6})))
   (.addControl @globear-map (new js/mapboxgl.NavigationControl))

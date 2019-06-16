@@ -27,6 +27,7 @@
               (js->clj r)
               (>! channel/response-chan {:action :receive :entity :marker :payload (:body r)})))))
 
+;TODO fetch new gojson markers at once and move single marker logic to map
 (defmethod execute [:download :marker] [message]
   (if (nil? (:id message))
         (get-all-markers message)
@@ -78,7 +79,7 @@
                                  (set! (:url message))))))
                        10))))
 
-
+;TODO this will no longer be necessary with new gojson markers
 (defmethod execute [:receive :marker] [message]
   (map/add-marker-to-map (:payload message))
   )
