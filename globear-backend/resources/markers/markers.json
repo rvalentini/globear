@@ -40,5 +40,77 @@
       "20141224_235642"
     ],
     "comment" : "HongKong"
+  },
+  {
+    "id": "3",
+    "coordinates": [
+      -3.708787,
+      40.415184
+    ],
+    "pictures": [
+      "IMG_000_1131",
+      "IMG_000_1134",
+      "IMG_000_1138",
+      "IMG_000_1140",
+      "IMG_000_1141",
+      "IMG_000_1144",
+      "IMG_000_1156"
+    ],
+    "comment": "Madrid - Mercado San Miguel"
+  },
+  {
+    "id": "4",
+    "coordinates": [
+      -3.712672,
+      40.41512
+    ],
+    "pictures": [
+     "IMG_000_1160",
+     "IMG_000_1165"
+    ],
+    "comment": "Madrid - Arzobispado de Madrid"
+  },
+  {
+    "id": "5",
+    "coordinates": [
+      -3.692149,
+      40.413757
+    ],
+    "pictures": [
+      "IMG_000_1191",
+      "IMG_000_1192",
+      "IMG_000_1197",
+      "IMG_000_1198",
+      "IMG_000_1201",
+      "IMG_000_1202",
+      "IMG_000_1215",
+      "IMG_000_1223",
+      "IMG_000_1224",
+      "IMG_000_1230",
+      "IMG_000_1233"
+    ],
+    "comment": "Madrid - Prado"
+  },
+  {
+    "id": "6",
+    "coordinates": [
+      -3.697067,
+      40.418562
+    ],
+    "pictures": [
+      "IMG_000_1237"
+    ],
+    "comment": "Madrid - Edificio Metropolis"
+  },
+  {
+    "id": "7",
+    "coordinates": [
+      -3.700378,
+      40.416614
+    ],
+    "pictures": [
+      "IMG_000_1243"
+    ],
+    "comment": "Madrid - Plaza de Canalejas"
   }
 ]
