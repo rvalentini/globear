@@ -13,7 +13,7 @@
   (println "Requested all markers from backend")
   (go (let [response (<! (http/get "http://localhost:3000/markers" {:with-credentials? false}))]
         (as-> response r
-              (js->clj r)
+              (js->clj r)                                   ;;TODO for all markers call .addSource
               (doseq [marker (:body r)]
                 (println (str "Marker " marker))
                 (>! channel/response-chan {:action :receive :entity :marker :payload marker}))))))

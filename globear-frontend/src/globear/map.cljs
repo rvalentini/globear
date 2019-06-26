@@ -18,13 +18,17 @@
 
 
 (defn- build-picture-popup [marker]
+  (println (aget marker "coordinates" ))
   (-> (new js/mapboxgl.Popup (clj->js {:offset 25}))
+      (.setLngLat (clj->js {:lng (aget marker "coordinates" 0) :lat (aget marker "coordinates" 1)}))
       (.setDOMContent
-        (hipo/create [:div (for [src (aget marker "properties" "pictures")]
+        (hipo/create [:div (for [src (aget marker "pictures")]
                              [:img {:id src
                                     :class "custom-popup-item"
                                     :src "totoro_loading.png"
-                                    :on-click #(expand-picture src)}])]))))
+                                    :on-click #(expand-picture src)}])]))
+      (.addTo @globear-map)
+      ))
 
 
 (defn- build-mapbox-marker [marker-data]
@@ -56,13 +60,26 @@
 ;;TODO make popup triggered by click on lowest symbol layer
 (defn- add-source []
   )
+
+(defn- on-place-click [e]
+  (println "Clicked on place")
+  (let [marker (aget e "features" 0 "properties")]
+    (println marker)
+    (println (js->clj marker))
+    (println (nth (aget marker "coordinates") 0) )
+    (println (type (aget marker "coordinates")))
+    (build-picture-popup marker)
+    )
+  )
+
+
 (defn- on-map-load []
   (println "LOADED MAP")
   (.addSource @globear-map "markers" (clj->js {:type "geojson"
-                                                :data "http://localhost:3000/geojson"
-                                                :cluster true
-                                                :clusterMaxZoom 14
-                                                :clusterRadius 50}) )
+                                               :data "http://localhost:3000/geojson"
+                                               :cluster true
+                                               :clusterMaxZoom 14
+                                               :clusterRadius 50}) )
   (.addLayer @globear-map (clj->js {:id "clusters"
                                     :type "circle"
                                     :source "markers"
@@ -88,7 +105,7 @@
                                     :layout {:text-field "{point_count_abbreviated}"
                                              :text-font ["DIN Offc Pro Medium" "Arial Unicode MS Bold"]
                                              :text-size 12} }) )
-  (.addLayer @globear-map (clj->js {:id "unclustered-point"
+  (.addLayer @globear-map (clj->js {:id "place"
                                     :type "circle"
                                     :source "markers"
                                     :filter ["!" ["has" "point_count"]]
@@ -104,7 +121,9 @@
   (reset! globear-map (new js/mapboxgl.Map (clj->js {:container "map" :style "mapbox://styles/rival/cjt705zrp0j781gn20szdi3y1" :center [103.865158 1.354875], :zoom 10.6})))
   (.addControl @globear-map (new js/mapboxgl.NavigationControl))
   (.on @globear-map "zoomstart" #(on-zoom))
-  (.on @globear-map "load" #(on-map-load)))
+  (.on @globear-map "load" #(on-map-load))
+  ;;TODO following lines define new layer behaviour
+  (.on @globear-map "click" "place" #(on-place-click %)))
 
 
 
