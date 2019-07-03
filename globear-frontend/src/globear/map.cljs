@@ -76,7 +76,7 @@
 (defn- on-map-load []
   (println "LOADED MAP")
   (.addSource @globear-map "markers" (clj->js {:type "geojson"
-                                               :data "http://localhost:3000/geojson"
+                                               :data "http://localhost:3000/geojson" ;;TODO this should be loaded in actions.clj -> call addsource from there
                                                :cluster true
                                                :clusterMaxZoom 14
                                                :clusterRadius 50}) )
