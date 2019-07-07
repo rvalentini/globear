@@ -4,7 +4,12 @@
             [globear.picture-overlay :as img]
             [globear.messaging.channel :as channel]
             [cljs.core.async
-             :refer [>! <! go chan buffer close! alts! timeout]]))
+             :refer [>! <! go chan buffer close! alts! timeout]]
+            [cognitect.transit :as transit]))
+
+(def writer (transit/writer :json))
+
+
 
 (def globear-map (reagent/atom nil))
 
@@ -73,13 +78,14 @@
   )
 
 
-(defn- on-map-load []
-  (println "LOADED MAP")
+(defn add-markers-source-to-map [geojson]
+  (println (clj->js geojson))
   (.addSource @globear-map "markers" (clj->js {:type "geojson"
-                                               :data "http://localhost:3000/geojson" ;;TODO this should be loaded in actions.clj -> call addsource from there
+                                               :data "http://localhost:3000/geojson" ;;TODO NOT WORKING WITH INLINE
                                                :cluster true
                                                :clusterMaxZoom 14
                                                :clusterRadius 50}) )
+
   (.addLayer @globear-map (clj->js {:id "clusters"
                                     :type "circle"
                                     :source "markers"
@@ -112,11 +118,20 @@
                                     :paint {:circle-color "#FF0000"
                                             :circle-radius 10
                                             :circle-stroke-width 1
-                                            :circle-stroke-color "#fff"} }) ))
+                                            :circle-stroke-color "#fff"} }) )
+  )
+
+
+
+
+
+(defn- on-map-load []
+  (println "LOADED MAP")
+  (go (>! channel/request-chan {:action :download :entity :marker}))  ;;TODO reintroduce logic in new layerd design
+  )
 
 
 (defn- map-init []
-  ;(go (>! channel/request-chan {:action :download :entity :marker}))  ;;TODO reintroduce logic in new layerd design
   (set! (.-accessToken js/mapboxgl) "pk.eyJ1Ijoicml2YWwiLCJhIjoiY2lxdWxpdHRqMDA0YWk3bTM1Mjc1dmVvYiJ9.uxBDzgwojTzU-Orq2AEUZA")
   (reset! globear-map (new js/mapboxgl.Map (clj->js {:container "map" :style "mapbox://styles/rival/cjt705zrp0j781gn20szdi3y1" :center [103.865158 1.354875], :zoom 10.6})))
   (.addControl @globear-map (new js/mapboxgl.NavigationControl))

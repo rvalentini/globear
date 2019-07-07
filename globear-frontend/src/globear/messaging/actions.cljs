@@ -2,21 +2,26 @@
   (:require [cljs.core.async :refer [<! >! go]]
             [globear.messaging.channel :as channel]
             [globear.map :as map]
-            [cljs-http.client :as http]))
+            [cljs-http.client :as http]
+            [cognitect.transit :as transit]))
+
+(def reader (transit/reader :json))
 
 
 (defmulti execute
           (fn [x] [(:action x) (:entity x)]))
 
 
+;(transit/read reader r)
+;;(println r)
+;(let [marker (get-in r ["features" 0  "properties" "coordinates" 0] )]
+;  (println marker))
+
+
 (defn- get-all-markers [message]
   (println "Requested all markers from backend")
-  (go (let [response (<! (http/get "http://localhost:3000/markers" {:with-credentials? false}))]
-        (as-> response r
-              (js->clj r)                                   ;;TODO for all markers call .addSource
-              (doseq [marker (:body r)]
-                (println (str "Marker " marker))
-                (>! channel/response-chan {:action :receive :entity :marker :payload marker}))))))
+  (go (let [response (<! (http/get "http://localhost:3000/geojson" {:with-credentials? false}))]
+              (>! channel/response-chan {:action :receive :entity :markers :payload (:body response)}))))
 
 
 (defn- get-single-marker [message]
@@ -80,8 +85,8 @@
                        10))))
 
 ;TODO this will no longer be necessary with new gojson markers
-(defmethod execute [:receive :marker] [message]
-  (map/add-marker-to-map (:payload message))
-  )
+(defmethod execute [:receive :markers] [message]
+  (println "Parsing marker source response ...")
+  (map/add-markers-source-to-map (:payload message) ))
 
 
