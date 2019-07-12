@@ -79,9 +79,18 @@
 
 
 (defn add-markers-source-to-map [geojson]
-  (println (clj->js geojson))
-  (.addSource @globear-map "markers" (clj->js {:type "geojson"
-                                               :data "http://localhost:3000/geojson" ;;TODO NOT WORKING WITH INLINE
+  (println (str "geojson: " (clj->js geojson)))
+
+
+
+  (println (.stringify js/JSON (clj->js {:type "geojson" ;;TODO print this
+                                         :data (.parse js/JSON geojson) ;;TODO
+                                         :cluster true
+                                         :clusterMaxZoom 14
+                                         :clusterRadius 50})))
+
+  (.addSource @globear-map "markers" (clj->js {:type "geojson" ;;TODO print this
+                                               :data (.parse js/JSON geojson) ;;TODO NOT WORKING WITH INLINE
                                                :cluster true
                                                :clusterMaxZoom 14
                                                :clusterRadius 50}) )
