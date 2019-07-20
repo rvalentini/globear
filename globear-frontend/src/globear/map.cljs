@@ -70,27 +70,21 @@
   (println "Clicked on place")
   (let [marker (aget e "features" 0 "properties")]
     (println marker)
+    ;(println (.parse js/JSON marker))
     (println (js->clj marker))
-    (println (nth (aget marker "coordinates") 0) )
-    (println (type (aget marker "coordinates")))
-    (build-picture-popup marker)
+    (println (get-in (js->clj marker)  ["coordinates" 2]))  ;;TODO test https://github.com/cognitect/transit-cljs
+    ;(println (first (get (js->clj marker) "coordinates")))
+    ;(println (nth (get (js->clj marker :keywordize-keys true) "coordinates") 0) )
+    ;(println (type (aget marker "coordinates")))
+    ;(build-picture-popup marker)
     )
   )
 
 
 (defn add-markers-source-to-map [geojson]
-  (println (str "geojson: " (clj->js geojson)))
-
-
-
-  (println (.stringify js/JSON (clj->js {:type "geojson" ;;TODO print this
-                                         :data (.parse js/JSON geojson) ;;TODO
-                                         :cluster true
-                                         :clusterMaxZoom 14
-                                         :clusterRadius 50})))
-
-  (.addSource @globear-map "markers" (clj->js {:type "geojson" ;;TODO print this
-                                               :data (.parse js/JSON geojson) ;;TODO NOT WORKING WITH INLINE
+  (println geojson) ;TODO this is valid JSON
+  (.addSource @globear-map "markers" (clj->js {:type "geojson"
+                                               :data (js->clj (.parse js/JSON geojson) )
                                                :cluster true
                                                :clusterMaxZoom 14
                                                :clusterRadius 50}) )
@@ -112,22 +106,24 @@
                                                             100
                                                             30
                                                             750
-                                                            40]}}) )
+                                                            40]}
+                                    }) )
   (.addLayer @globear-map (clj->js {:id "cluster-count"
                                     :type "symbol"
                                     :source "markers"
                                     :filter ["has" "point_count"]
                                     :layout {:text-field "{point_count_abbreviated}"
                                              :text-font ["DIN Offc Pro Medium" "Arial Unicode MS Bold"]
-                                             :text-size 12} }) )
+                                             :text-size 20} }) )
   (.addLayer @globear-map (clj->js {:id "place"
-                                    :type "circle"
+                                    :type "symbol"
                                     :source "markers"
                                     :filter ["!" ["has" "point_count"]]
-                                    :paint {:circle-color "#FF0000"
-                                            :circle-radius 10
-                                            :circle-stroke-width 1
-                                            :circle-stroke-color "#fff"} }) )
+                                    :layout {
+                                             :icon-image "totoro"
+                                             :icon-size 0.1
+                                             }
+                                    }) )
   )
 
 
@@ -136,7 +132,8 @@
 
 (defn- on-map-load []
   (println "LOADED MAP")
-  (go (>! channel/request-chan {:action :download :entity :marker}))  ;;TODO reintroduce logic in new layerd design
+  (.loadImage @globear-map "totoro.png" #(.addImage @globear-map "totoro" %2))
+  (go (>! channel/request-chan {:action :download :entity :marker}))  ;;TODO reintroduce logic in new layered design
   )
 
 
