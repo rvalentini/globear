@@ -42,7 +42,7 @@
 
 (defn add-markers-source-to-map [geojson]
   (util/add-source-layer-to-map globear-map geojson)
-  ((juxt util/add-cluster-layer-to-map
+  ((juxt util/add-cluster-layer-to-map-totoro
          util/add-item-count-layer-to-map
          util/add-place-symbol-layer-to-map)
      globear-map))
@@ -52,6 +52,7 @@
 (defn- on-map-load []
   (println "Map loaded!")
   (.loadImage @globear-map "totoro.png" #(.addImage @globear-map "totoro" %2))
+  (.loadImage @globear-map "totoro_cluster.png" #(.addImage @globear-map "totoro-cluster" %2))
   (go (>! channel/request-chan {:action :download :entity :marker})))
 
 (defn- register-listeners []

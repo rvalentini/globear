@@ -18,6 +18,16 @@
                                     :layout {:icon-image "totoro"
                                              :icon-size 0.1}})))
 
+(defn add-cluster-layer-to-map-totoro [globear-map]
+  (.addLayer @globear-map (clj->js {:id "clusters"
+                                    :type "symbol"
+                                    :source "markers"
+                                    :filter  [">" ["get" "point_count"] 0]
+                                    :layout {:icon-image "totoro-cluster"
+                                             :icon-size 0.1
+                                             :icon-allow-overlap true}})))
+
+
 (defn add-item-count-layer-to-map [globear-map]
   (.addLayer @globear-map (clj->js {:id "cluster-count"
                                     :type "symbol"
@@ -30,25 +40,25 @@
 
   )
 
-(defn add-cluster-layer-to-map [globear-map]
-  (.addLayer @globear-map (clj->js {:id "clusters"
-                                    :type "circle"
-                                    :source "markers"
-                                    :filter  ["has" "point_count"]
-                                    :paint {:circle-color ["step"
-                                                           ["get" "point_count"]
-                                                           "#51bbd6"
-                                                           100
-                                                           "#f1f075"
-                                                           750
-                                                           "#f28cb1"]
-                                            :circle-radius ["step"
-                                                            ["get" "point_count"]
-                                                            20
-                                                            100
-                                                            30
-                                                            750
-                                                            40]}})))
+;(defn add-cluster-layer-to-map [globear-map]
+;  (.addLayer @globear-map (clj->js {:id "clusters"
+;                                    :type "circle"
+;                                    :source "markers"
+;                                    :filter  ["has" "point_count"]
+;                                    :paint {:circle-color ["step"
+;                                                           ["get" "point_count"]
+;                                                           "#51bbd6"
+;                                                           100
+;                                                           "#f1f075"
+;                                                           750
+;                                                           "#f28cb1"]
+;                                            :circle-radius ["step"
+;                                                            ["get" "point_count"]
+;                                                            20
+;                                                            100
+;                                                            30
+;                                                            750
+;                                                            40]}})))
 
 (defn add-source-layer-to-map [globear-map geojson]
   (.addSource @globear-map "markers" (clj->js {:type "geojson"
