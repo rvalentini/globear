@@ -30,5 +30,4 @@
           (generate-thumbnail (first pictures))
           (recur (rest pictures) (inc idx)))))))
 
-;TODO make service run at startup
 

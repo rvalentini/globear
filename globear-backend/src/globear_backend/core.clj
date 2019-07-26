@@ -9,8 +9,6 @@
     [ring.util.response :refer [response]]
     [clojure.java.io :as io]
     [cheshire.core :refer [parse-string]]
-    [globear-backend.image.thumbnail :as thumbnail]
-    [globear-backend.image.exif-extractor :as exif]
     [globear-backend.thumbnail-service :as thumbnail-service]
     [ring.middleware.basic-authentication :refer [wrap-basic-authentication]]))
 
@@ -20,33 +18,13 @@
   (println "Checking if there is a thumbnail for every image ...")
   (thumbnail-service/generate-all-thumbnails))
 
-(def markers
-  (let [raw-markers (parse-string
-                      (slurp "resources/markers/markers.json") true)]
-    (into {} (map
-               (fn [x] {(:id x) x})
-               raw-markers))))
 
 (def not-found {:status  404
                 :body    "<h1>Page not found</h1>"})
 
 
-(defn- get-marker [id]
-  (let [marker (get markers id)]
-    (if
-      (nil? marker)
-      not-found
-      {:status  200
-       :headers {"Content-Type" "application/json"}
-       :body    marker})))
-
-(defn- get-all-markers []
-  (vals markers))
-
-
 (defn- get-picture [id]
   (let [path (str "resources/pictures/" id ".jpg")]
-    (exif/extract-exif-meta-data (io/file path))
     (if
       (.exists (io/file path))
       {:status  200
@@ -65,25 +43,18 @@
        :body    (io/input-stream path)}
       not-found)))
 
-(defn- authenticated? [name pass]
-  (and (= name "bubu") (= pass "baba")))
 
 (defroutes handler
            (GET "/" [] "<h1> Globear-backend says hallo!</h1>")
-           (GET "/markers" [] (response (get-all-markers)))
-           (GET "/markers/:id" [id] (get-marker id))
            (GET "/geojson" [] (io/input-stream "resources/markers/geojson_markers.json"))
            (GET "/pictures/:id" [id] (get-picture id))
            (GET "/thumbnails/:id" [id] (get-thumbnail id))
-           (GET "/test" [] (thumbnail/generate-thumbnail "20141229_153649")) ;TODO remove
-           (GET "/test2" [] (thumbnail-service/generate-all-thumbnails)) ;TODO remove
            (route/not-found "<h1>Page not found</h1>"))
 
 (def app
   (-> handler
       wrap-json-response
       (wrap-file "resources/pictures/")
-      ;(wrap-basic-authentication authenticated?) ;TODO activate
       (wrap-cors :access-control-allow-origin [#".*"]
                  :access-control-allow-methods [:get :put :post :delete]
                  :WWW-Authenticate "Basic realm=\"Globear\"")
