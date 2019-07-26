@@ -1,7 +1,7 @@
 (ns globear.messaging.actions
   (:require [cljs.core.async :refer [<! >! go]]
             [globear.messaging.channel :as channel]
-            [globear.map :as map]
+            [globear.map.map :as map]
             [cljs-http.client :as http]
             [cognitect.transit :as transit]))
 

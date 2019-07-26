@@ -1,7 +1,5 @@
 (ns globear.messaging.service
-  (:require [cljs.core.async
-             :as a
-             :refer [>! <! go chan buffer close! alts! timeout]]
+  (:require [cljs.core.async :refer [>! <! go chan buffer close! alts! timeout]]
             [globear.messaging.channel :as channels]
             [globear.messaging.actions :as actions]))
 

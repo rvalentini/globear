@@ -1,6 +1,6 @@
 (ns globear.core
   (:require [reagent.core :as reagent]
-            [globear.map :as map]
+            [globear.map.map :as map]
             [globear.messaging.service :as service]))
 
 

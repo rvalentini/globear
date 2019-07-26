@@ -1,7 +1,7 @@
-(ns globear.map
+(ns globear.map.map
   (:require [reagent.core :as reagent]
             [hipo.core :as hipo]
-            [globear.picture-overlay :as img]
+            [globear.map.picture-overlay :as img]
             [globear.messaging.channel :as channel]
             [cljs.core.async
              :refer [>! <! go chan buffer close! alts! timeout]]

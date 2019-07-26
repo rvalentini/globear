@@ -1,4 +1,4 @@
-(ns globear.picture-overlay)
+(ns globear.map.picture-overlay)
 
 
 (defn close-picture-overlay [state]
