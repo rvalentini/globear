@@ -4,15 +4,6 @@
             [globear.messaging.service :as service]))
 
 
-(defonce app-state
-    (reagent/atom
-      {:message "This is a test string" }))
-
-(defn on-click []
-  "will be used later :)"
-  (swap! app-state assoc :message "You clicked me :P"))
-
-
 (defn- app-init []
   (service/request-worker)
   (service/response-worker))
