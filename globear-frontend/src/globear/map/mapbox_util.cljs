@@ -1,8 +1,10 @@
 (ns globear.map.mapbox-util
-  (:require [clojure.tools.reader.edn :as edn]))
+  (:require [clojure.tools.reader.edn :as edn]
+            [cljs-bean.core :refer [bean ->clj ->js]]))
 
 
 (defn event->marker [event]
+  ;;TODO understand what is going on here
   (let [raw (js->clj (aget event "features" 0 "properties"))]
     {:coordinates (edn/read-string (get-in  raw ["coordinates"]))
      :pictures (edn/read-string (get-in  raw ["pictures"]))
@@ -67,3 +69,56 @@
                                                :cluster true
                                                :clusterMaxZoom 14
                                                :clusterRadius 50})))
+
+(defn obj->clj [globear-map obj]
+  ;(println (.log js/console obj))
+    (let [features (.queryRenderedFeatures globear-map (aget obj "point") {:layers ["clusters"]})]
+      (println (.log js/console features))
+      (println "-------")
+      ;(println (js->clj (aget features 0 "properties" "cluster_id")))
+      (let [feature (js->clj (aget features 0 "properties") :keywordize-keys true)]
+        ;TODO insights: only from "properties layer" downwards working
+        ;TODO one layer above there is a map-box specific part which cannot be parsed by neither js->clj nor ->clj
+        ;TODO try to make this somehow generic
+        (println feature)
+        (println (:cluster_id feature))
+
+        )
+      ;(println (edn/read-string (js->clj (aget features [0 "properties"]))))
+      ;(println (edn/read-string (js->clj features)))
+      ;(println (:y parsed))
+
+      )
+
+    ;(let [converted (edn/read-string (js->clj obj)) ]
+    ;
+    ;  (println (get-in converted [:point 0 :properties :cluster_id]))
+    ;
+    ;  )
+
+
+  )
+
+
+(defn zoom-on-clicked-cluster [globear-map event]
+  ;(println (.log js/console event))
+  (println (.log js/console (.queryRenderedFeatures globear-map (aget event "point") {:layers ["clusters"]})))
+
+  (let [features (.queryRenderedFeatures globear-map (aget event "point") {:layers ["clusters"]})]
+    (println (.log js/console (aget features [0 "properties" "cluster_id"])))
+
+    )
+
+  (let [features (.queryRenderedFeatures globear-map (aget event "point") {:layers ["clusters"]})
+        cluster-id (get-in features [0 "properties" "cluster_id"])
+        source (.getSource globear-map "markers")
+        center (get-in features ["geometry" "coordinates"])]
+
+    (.getClusterExpansionZoom source cluster-id #(if (nil? %1)
+                                                   (.easeTo map {:center center
+                                                                 :zoom %2})
+                                                   (println "ERROR on cluster-zoom event!")))
+
+    )
+
+  )

@@ -58,7 +58,9 @@
 (defn- register-listeners []
   ;(.on @globear-map "zoomstart" #(on-zoom))
   (.on @globear-map "load" #(on-map-load))
-  (.on @globear-map "click" "place" #(on-place-click %)))
+  (.on @globear-map "click" "place" #(on-place-click %))
+  (.on @globear-map "click" "clusters" #(util/obj->clj @globear-map %1))
+  )
 
 (defn- map-init []
   (set! (.-accessToken js/mapboxgl) "pk.eyJ1Ijoicml2YWwiLCJhIjoiY2lxdWxpdHRqMDA0YWk3bTM1Mjc1dmVvYiJ9.uxBDzgwojTzU-Orq2AEUZA")
