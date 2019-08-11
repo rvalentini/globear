@@ -48,7 +48,6 @@
      globear-map))
 
 
-
 (defn- on-map-load []
   (println "Map loaded!")
   (.loadImage @globear-map "totoro.png" #(.addImage @globear-map "totoro" %2))
@@ -59,7 +58,7 @@
   ;(.on @globear-map "zoomstart" #(on-zoom))
   (.on @globear-map "load" #(on-map-load))
   (.on @globear-map "click" "place" #(on-place-click %))
-  (.on @globear-map "click" "clusters" #(util/obj->clj @globear-map %1))
+  (.on @globear-map "click" "clusters" #(util/zoom-on-clicked-cluster @globear-map %1))
   )
 
 (defn- map-init []
