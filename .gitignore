@@ -15,3 +15,5 @@ pom.xml.asc
 .idea/
 *.iml
 *_thumbnail.png
+*_thumbnail.jpg
+*.jpg
