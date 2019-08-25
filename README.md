@@ -1,6 +1,8 @@
 # Globear
 
-[insert small Totoro here]
+<p align="center">
+  <img src="/globear-frontend/resources/public/totoro_loading.png" width="100" title="hover text">
+</p>
 
 A 'beartastic' image viewer application written in Clojure/ClojureScript using Mapbox GL JS. 
 
@@ -14,6 +16,11 @@ in this project I managed to combine three of my interests:
 In case you have any questions/advice/suggestions/feature-requests/rants or just want to talk about Hayao Miyazaki, please feel free to contanct me. 
 
 Travel the world and see all the things! 
+
+<p align="center">
+  <img src="/globear-frontend/resources/public/screenshot_marker.png" width="350" title="Cluster Marker View">
+  <img src="/globear-frontend/resources/public/screenshot_popup.png" width="350" title="Popup Overlay View">
+</p>
 
 ## Specs
 
@@ -49,5 +56,5 @@ Current state of Globear now includes the following features:
 9. [Frontend] feature: upload pictures and set markers 
 10. [Frontend] feature: new marker types -> restaurant / text / etc 
 
-##License
+## License
 Copyright © 2019 Riccardo Valentini
