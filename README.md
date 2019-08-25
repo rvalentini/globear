@@ -1,13 +1,13 @@
-# globear
+# Globear
 
 [insert small Totoro here]
 
-A 'beartastic' image viewer application written in Clojure/ClojureScript using mapbox gl js. 
+A 'beartastic' image viewer application written in Clojure/ClojureScript using Mapbox GL JS. 
 
-I started to work on this application with the goal to have my own personalized, highly customized travel/blog/food-guide/photo-diary/stuff-my-parents-would-like-to-see application and also to learn more about programming in Clojure and Clojurescript. The application is not anywhere near complete at the moment, but already provides enough features to be used as a geospatial iamge viewer. I am of course working relentlessly on creating new features for globear and you can see a rough outline of the things to come in the TODO section below. 
+I started to work on this application with the goal to have my own personalized, highly customized travel/blog/food-guide/photo-diary/stuff-my-parents-would-like-to-see application and also to learn more about programming in Clojure and Clojurescript. The application is not anywhere near complete at the moment, but already provides enough features to be used as a geospatial image viewer. I am of course working relentlessly on creating new features for Globear and you can see a rough outline of the things to come in the TODO section below. 
 
-in this project I managed to combined three of my interests:
-1. Clojure
+in this project I managed to combine three of my interests:
+1. Programming Clojure
 2. Traveling 
 3. The works of Hayao Miyazaki
 
@@ -22,12 +22,16 @@ The frontend is written in ClojureScript using Figwheel Main and Reagent and rel
 The backend is written entirely in Clojure with a basic Leiningen setup, using Ring for HTTP request handling and Compojure for routing.
 
 
+## Usage
+
+For usage instructions of the application, see the README files in the respective `frontend` and `backend` module packages.
+
 ## Features
 
-Current state of globear now includes the following features:
+Current state of Globear now includes the following features:
 
 * Totoro-themed geo-markers :D
-* Marker popups deisplay thumbnail presentation of the pictures
+* Marker popups display thumbnail presentation of the pictures
 * Full-screen picture overlay with lazy loading from backend
 * Cluster-markers with Totoro-themed size indicators for lower zoom steps
 * Automatic thumbnail generation in the backend on startup
@@ -44,3 +48,6 @@ Current state of globear now includes the following features:
 8. [Backend] make AWS deployable
 9. [Frontend] feature: upload pictures and set markers 
 10. [Frontend] feature: new marker types -> restaurant / text / etc 
+
+##License
+Copyright © 2019 Riccardo Valentini
