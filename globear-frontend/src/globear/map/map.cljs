@@ -4,6 +4,7 @@
             [globear.map.picture-overlay :as img]
             [globear.map.mapbox-util :as util]
             [globear.messaging.channel :as channel]
+            [globear.map.mapbox-config :as conf]
             [cljs.core.async
              :refer [>! <! go chan buffer close! alts! timeout]]))
 
@@ -62,7 +63,7 @@
   )
 
 (defn- map-init []
-  (set! (.-accessToken js/mapboxgl) "pk.eyJ1Ijoicml2YWwiLCJhIjoiY2lxdWxpdHRqMDA0YWk3bTM1Mjc1dmVvYiJ9.uxBDzgwojTzU-Orq2AEUZA")
+  (set! (.-accessToken js/mapboxgl) conf/token)
   (reset! globear-map (new js/mapboxgl.Map (clj->js {:container "map" :style "mapbox://styles/rival/cjt705zrp0j781gn20szdi3y1" :center [-3.688495 40.399189], :zoom 8.6})))
   (.addControl @globear-map (new js/mapboxgl.NavigationControl))
   (register-listeners))
