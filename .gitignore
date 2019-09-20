@@ -18,3 +18,4 @@ pom.xml.asc
 *_thumbnail.jpg
 *.jpg
 mapbox_config.cljs
+.DS_Store

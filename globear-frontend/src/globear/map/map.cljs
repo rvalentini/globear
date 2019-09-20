@@ -6,7 +6,8 @@
             [globear.messaging.channel :as channel]
             [globear.map.mapbox-config :as conf]
             [cljs.core.async
-             :refer [>! <! go chan buffer close! alts! timeout]]))
+             :refer [>! <! go chan buffer close! alts! timeout]]
+            [clojure.tools.reader.edn :as edn]))
 
 
 (def globear-map (reagent/atom nil))
@@ -34,11 +35,25 @@
                                     :on-click #(expand-picture src)}])]))
       (.addTo @globear-map)))
 
-
+(defn- build-context-popup [coordinates]
+  (-> (new js/mapboxgl.Popup)
+      (.setLngLat (clj->js {:lng (first coordinates) :lat (second coordinates)}))
+      (.setDOMContent (hipo/create
+                        [:div
+                          [:p "Hello there!" ]
+                          [:input {:type "button" :value "Add marker!"
+                                  :on-click #(js/alert "You clicked me :D")}]
+                         ]))
+      (.addTo @globear-map)))
 
 (defn- on-place-click [e]
   (let [marker (util/event->marker e)]
     (build-picture-popup marker)))
+
+;TODO make sure not to add marker on top of existing markers
+(defn- on-click [e]
+  (let [coordinates (js->clj (.toArray (aget e "lngLat")))  ]
+    (build-context-popup coordinates)))
 
 
 (defn add-markers-source-to-map [geojson]
@@ -59,6 +74,7 @@
   ;(.on @globear-map "zoomstart" #(on-zoom))
   (.on @globear-map "load" #(on-map-load))
   (.on @globear-map "click" "place" #(on-place-click %))
+  (.on @globear-map "contextmenu" #(on-click %))
   (.on @globear-map "click" "clusters" #(util/zoom-on-clicked-cluster @globear-map %1))
   )
 
