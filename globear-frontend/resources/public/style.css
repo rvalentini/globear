@@ -10,6 +10,10 @@
     /*max-width: 200px; */
 }
 
+.mapboxgl-popup-close-button {
+    display: none;
+}
+
 .mapboxgl-popup-content {
     max-width: 550px;
     max-height: 330px;
@@ -27,6 +31,15 @@
     /*width: 200px;*/
     height: 100px;
     align-self: center;
+}
+
+.context-menu {
+    position: absolute;
+    width: 100px;
+    height: 20px;
+    top: 50px;
+    left: 50px;
+    background: green;
 }
 
 .img-fullscreen-overlay {

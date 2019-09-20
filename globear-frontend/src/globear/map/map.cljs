@@ -5,15 +5,19 @@
             [globear.map.mapbox-util :as util]
             [globear.messaging.channel :as channel]
             [globear.map.mapbox-config :as conf]
+            [globear.map.context-menu :as menu]
             [cljs.core.async
-             :refer [>! <! go chan buffer close! alts! timeout]]
-            [clojure.tools.reader.edn :as edn]))
+             :refer [>! <! go chan buffer close! alts! timeout]]))
 
 
 (def globear-map (reagent/atom nil))
 
 (def img-overlay-state
   (reagent/atom {:visible false}))
+
+(def context-menu-state
+  (reagent/atom {:visible false
+                 :position {:lat 0 :lng 0}}))               ;TODO rename lat lng
 
 
 (defn- expand-picture [src]
@@ -35,25 +39,26 @@
                                     :on-click #(expand-picture src)}])]))
       (.addTo @globear-map)))
 
-(defn- build-context-popup [coordinates]
-  (-> (new js/mapboxgl.Popup)
-      (.setLngLat (clj->js {:lng (first coordinates) :lat (second coordinates)}))
-      (.setDOMContent (hipo/create
-                        [:div
-                          [:p "Hello there!" ]
-                          [:input {:type "button" :value "Add marker!"
-                                  :on-click #(js/alert "You clicked me :D")}]
-                         ]))
-      (.addTo @globear-map)))
+
+
+(defn- open-context-menu [coordinates]                      ;TODO make nicer with fnil? juxt? patial?
+  (swap! context-menu-state assoc :visible true)
+  (swap! context-menu-state assoc-in [:position :lat] (first coordinates))
+  (swap! context-menu-state assoc-in [:position :lng] (second coordinates)))
+
 
 (defn- on-place-click [e]
   (let [marker (util/event->marker e)]
     (build-picture-popup marker)))
 
+
+
 ;TODO make sure not to add marker on top of existing markers
 (defn- on-click [e]
-  (let [coordinates (js->clj (.toArray (aget e "lngLat")))  ]
-    (build-context-popup coordinates)))
+  (println (aget e "point" "x"))
+  (println (aget e "point" "y"))
+  (let [coordinates [(aget e "point" "x") (aget e "point" "y")]  ]
+    (open-context-menu coordinates)))
 
 
 (defn add-markers-source-to-map [geojson]
@@ -88,7 +93,8 @@
 (defn- map-render []
   [:div
    [:div#map]
-   (if (true? (:visible @img-overlay-state)) [img/picture-overlay img-overlay-state])])
+   (if (true? (:visible @img-overlay-state)) [img/picture-overlay img-overlay-state])
+   (if (true? (:visible @context-menu-state)) [menu/context-menu context-menu-state])])
 
 
 (defn map-component []
