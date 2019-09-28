@@ -35,12 +35,39 @@
 
 .context-menu {
     position: absolute;
-    width: 100px;
+    /*width: 100px;
     height: 20px;
     top: 50px;
     left: 50px;
-    background: green;
+    background: green;*/
 }
+
+.context-menu ul {
+    margin: 0;
+    padding: 0;
+    width:185px;
+    list-style-type: none;
+}
+
+.context-menu ul li a {
+    text-decoration: none;
+    color: white;
+    padding: 10.5px 11px;
+    background-color: #2a1a5e;
+    display:block;
+}
+
+.context-menu ul li a:visited {
+    color: white;
+}
+
+.context-menu ul li a:hover, .menu_simple ul li .current {
+    color: white;
+    background-color: #fb9224;
+}
+
+
+
 
 .img-fullscreen-overlay {
     background-color: black;

@@ -20,6 +20,7 @@
                  :position {:lat 0 :lng 0}}))               ;TODO rename lat lng
 
 
+;TODO move to image-overlay
 (defn- expand-picture [src]
   (go (>! channel/request-chan {:action :download :entity :picture :id src}))
   (swap! img-overlay-state assoc :visible true ))
@@ -40,21 +41,23 @@
       (.addTo @globear-map)))
 
 
-
+;TODO move to context-menu
 (defn- open-context-menu [coordinates]                      ;TODO make nicer with fnil? juxt? patial?
   (swap! context-menu-state assoc :visible true)
   (swap! context-menu-state assoc-in [:position :lat] (first coordinates))
   (swap! context-menu-state assoc-in [:position :lng] (second coordinates)))
 
+(defn- close-context-menu []
+  (swap! context-menu-state assoc :visible false))
 
 (defn- on-place-click [e]
   (let [marker (util/event->marker e)]
     (build-picture-popup marker)))
 
 
-
 ;TODO make sure not to add marker on top of existing markers
-(defn- on-click [e]
+(defn- on-right-click [e]
+  ;;TODO close popup here if opened currently
   (println (aget e "point" "x"))
   (println (aget e "point" "y"))
   (let [coordinates [(aget e "point" "x") (aget e "point" "y")]  ]
@@ -62,11 +65,7 @@
 
 
 (defn add-markers-source-to-map [geojson]
-  (util/add-source-layer-to-map globear-map geojson)
-  ((juxt util/add-cluster-layer-to-map-totoro
-         util/add-item-count-layer-to-map
-         util/add-place-symbol-layer-to-map)
-     globear-map))
+  (util/init-map-with-source globear-map geojson))
 
 
 (defn- on-map-load []
@@ -76,11 +75,11 @@
   (go (>! channel/request-chan {:action :download :entity :marker})))
 
 (defn- register-listeners []
-  ;(.on @globear-map "zoomstart" #(on-zoom))
   (.on @globear-map "load" #(on-map-load))
   (.on @globear-map "click" "place" #(on-place-click %))
-  (.on @globear-map "contextmenu" #(on-click %))
-  (.on @globear-map "click" "clusters" #(util/zoom-on-clicked-cluster @globear-map %1))
+  (.on @globear-map "contextmenu" #(on-right-click %))
+  (.on @globear-map "click" #(close-context-menu))
+  (.on @globear-map "click" "clusters" #(util/zoom-on-clicked-cluster globear-map %1))
   )
 
 (defn- map-init []

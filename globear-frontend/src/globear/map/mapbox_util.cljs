@@ -14,6 +14,14 @@
      :comment (get-in raw ["comment"])}))
 
 
+(defn init-map-with-source [globear-map source]
+  (do
+    (add-source-layer-to-map globear-map source)
+    (add-cluster-layer-to-map globear-map)
+    (add-item-count-layer-to-map globear-map)
+    (add-place-symbol-layer-to-map globear-map)))
+
+
 (defn add-place-symbol-layer-to-map [globear-map]
   (.addLayer @globear-map (clj->js {:id "place"
                                     :type "symbol"
@@ -23,7 +31,7 @@
                                              :icon-size 0.1}})))
 
 
-(defn add-cluster-layer-to-map-totoro [globear-map]
+(defn add-cluster-layer-to-map [globear-map]
   (.addLayer @globear-map (clj->js {:id "clusters"
                                     :type "symbol"
                                     :source "markers"
@@ -51,14 +59,20 @@
                                                :clusterMaxZoom 14
                                                :clusterRadius 50})))
 
+(defn add-new-marker-to-source-layer [globear-map coordinates comment]
+  ;TODO implement
+  ;TODO getSource on map "markers"
+  ;TODO append a new marker (maybe via new build-marker method)
+  )
+
 
 (defn zoom-on-clicked-cluster [globear-map event]
-  (let [features (.queryRenderedFeatures globear-map (aget event "point") {:layers ["clusters"]})
+  (let [features (.queryRenderedFeatures @globear-map (aget event "point") {:layers ["clusters"]})
         cluster-id (aget features 0 "properties" "cluster_id")
-        source (.getSource globear-map "markers")
+        source (.getSource @globear-map "markers")
         center (aget features 0 "geometry" "coordinates")]
     (.getClusterExpansionZoom source cluster-id #(if (nil? %1)
-                                                   (.easeTo globear-map (clj->js {:center (js->clj center)
+                                                   (.easeTo @globear-map (clj->js {:center (js->clj center)
                                                                                   :zoom %2}))
                                                    (println "ERROR on cluster-zoom event!")))))
 
