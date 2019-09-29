@@ -59,11 +59,30 @@
                                                :clusterMaxZoom 14
                                                :clusterRadius 50})))
 
-(defn add-new-marker-to-source-layer [globear-map coordinates comment]
-  ;TODO implement
-  ;TODO getSource on map "markers"
-  ;TODO append a new marker (maybe via new build-marker method)
-  )
+
+(defn- build-marker [coordinates comment id]
+  {:type "Feature"
+   :properties {:id (str id)
+                :coordinates coordinates
+                :pictures []
+                :comment comment}
+   :geometry {:type "Point"
+              :coordinates [(first coordinates) (second coordinates) 0]}})
+
+
+(defn- append-marker-to-source [coordinates comment marker-source]
+  (let [asJson (.parse js/JSON @marker-source)
+        asEdn (js->clj asJson :keywordize-keys true)
+        features (:features asEdn)
+        id (inc (count features))]
+    (assoc-in asEdn [:features] (conj features (build-marker coordinates comment id)))))
+
+
+(defn add-new-marker-to-source-layer [globear-map coordinates comment marker-source]
+  (let [source-layer (.getSource @globear-map "markers")
+        source (append-marker-to-source coordinates comment marker-source)]
+    (reset! marker-source (.stringify js/JSON (clj->js source)) )
+    (.setData source-layer (clj->js source))))
 
 
 (defn zoom-on-clicked-cluster [globear-map event]

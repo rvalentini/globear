@@ -12,12 +12,15 @@
 
 (def globear-map (reagent/atom nil))
 
+(def marker-source (reagent/atom nil))
+
 (def img-overlay-state
   (reagent/atom {:visible false}))
 
 (def context-menu-state
   (reagent/atom {:visible false
-                 :position {:lat 0 :lng 0}}))               ;TODO rename lat lng
+                 :position {:x 0 :y 0}
+                 :coordinates {:lat 0 :lng 0}}))
 
 
 ;TODO move to image-overlay
@@ -41,14 +44,6 @@
       (.addTo @globear-map)))
 
 
-;TODO move to context-menu
-(defn- open-context-menu [coordinates]                      ;TODO make nicer with fnil? juxt? patial?
-  (swap! context-menu-state assoc :visible true)
-  (swap! context-menu-state assoc-in [:position :lat] (first coordinates))
-  (swap! context-menu-state assoc-in [:position :lng] (second coordinates)))
-
-(defn- close-context-menu []
-  (swap! context-menu-state assoc :visible false))
 
 (defn- on-place-click [e]
   (let [marker (util/event->marker e)]
@@ -58,13 +53,13 @@
 ;TODO make sure not to add marker on top of existing markers
 (defn- on-right-click [e]
   ;;TODO close popup here if opened currently
-  (println (aget e "point" "x"))
-  (println (aget e "point" "y"))
-  (let [coordinates [(aget e "point" "x") (aget e "point" "y")]  ]
-    (open-context-menu coordinates)))
+  (let [coordinates [(aget e "lngLat" "lng") (aget e "lngLat" "lat")]
+        position [(aget e "point" "x") (aget e "point" "y")]]
+    (menu/open-context-menu coordinates position context-menu-state)))
 
 
 (defn add-markers-source-to-map [geojson]
+  (reset! marker-source geojson)
   (util/init-map-with-source globear-map geojson))
 
 
@@ -78,9 +73,8 @@
   (.on @globear-map "load" #(on-map-load))
   (.on @globear-map "click" "place" #(on-place-click %))
   (.on @globear-map "contextmenu" #(on-right-click %))
-  (.on @globear-map "click" #(close-context-menu))
-  (.on @globear-map "click" "clusters" #(util/zoom-on-clicked-cluster globear-map %1))
-  )
+  (.on @globear-map "click" #(menu/close-context-menu context-menu-state))
+  (.on @globear-map "click" "clusters" #(util/zoom-on-clicked-cluster globear-map %1)))
 
 (defn- map-init []
   (set! (.-accessToken js/mapboxgl) conf/token)
@@ -92,8 +86,13 @@
 (defn- map-render []
   [:div
    [:div#map]
-   (if (true? (:visible @img-overlay-state)) [img/picture-overlay img-overlay-state])
-   (if (true? (:visible @context-menu-state)) [menu/context-menu context-menu-state])])
+   (if (true? (:visible @img-overlay-state)) [img/picture-overlay
+                                              img-overlay-state])
+   (if (true? (:visible @context-menu-state)) [menu/context-menu
+                                               context-menu-state
+                                               util/add-new-marker-to-source-layer
+                                               globear-map
+                                               marker-source])])
 
 
 (defn map-component []
