@@ -65,6 +65,7 @@
 
 (defn- on-map-load []
   (println "Map loaded!")
+  ;;TODO Totoro not loaded fast enough? On inital map-load -> only number appearing
   (.loadImage @globear-map "totoro.png" #(.addImage @globear-map "totoro" %2))
   (.loadImage @globear-map "totoro_cluster.png" #(.addImage @globear-map "totoro-cluster" %2))
   (go (>! channel/request-chan {:action :download :entity :marker})))
@@ -78,7 +79,7 @@
 
 (defn- map-init []
   (set! (.-accessToken js/mapboxgl) conf/token)
-  (reset! globear-map (new js/mapboxgl.Map (clj->js {:container "map" :style "mapbox://styles/rival/cjt705zrp0j781gn20szdi3y1" :center [-3.688495 40.399189], :zoom 8.6})))
+  (reset! globear-map (new js/mapboxgl.Map (clj->js {:container "map" :style "mapbox://styles/rival/ck16hxsq50d6n1clhleanmfhl" :center [-3.688495 40.399189], :zoom 10.6})))
   (.addControl @globear-map (new js/mapboxgl.NavigationControl))
   (register-listeners))
 
