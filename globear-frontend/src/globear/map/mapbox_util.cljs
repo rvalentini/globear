@@ -69,7 +69,7 @@
    :geometry {:type "Point"
               :coordinates [(first coordinates) (second coordinates) 0]}})
 
-
+;;TODO send the diff (= new marker part) to the server
 (defn- append-marker-to-source [coordinates comment marker-source]
   (let [asJson (.parse js/JSON @marker-source)
         asEdn (js->clj asJson :keywordize-keys true)

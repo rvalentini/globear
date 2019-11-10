@@ -43,12 +43,15 @@
        :body    (io/input-stream path)}
       not-found)))
 
+(defn- store-marker [req]
+  (str "Marker received: " req))
 
 (defroutes handler
            (GET "/" [] "<h1> Globear-backend says hallo!</h1>")
            (GET "/geojson" [] (io/input-stream "resources/markers/geojson_markers.json"))
            (GET "/pictures/:id" [id] (get-picture id))
            (GET "/thumbnails/:id" [id] (get-thumbnail id))
+           (PUT "/marker" [req] (store-marker req) )
            (route/not-found "<h1>Page not found</h1>"))
 
 (def app

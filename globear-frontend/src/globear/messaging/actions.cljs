@@ -67,5 +67,13 @@
                        10))))
 
 
+(defmethod execute [:upload :marker] [message]
+  (println "PUT new marker request to server!")
+  (let [url (str "http://localhost:3000/marker/")] ;;TODO make URL configurable
+    (go (let [_ (<! (http/put url
+                              {:with-credentials? false}))] ;;TODO add the correct parameters from message -> :marker or something
+          (>! channel/response-chan {:action :receive :entity :thumbnail :id (:id message) :url url})))))
+
+
 
 
