@@ -1,5 +1,8 @@
 (ns globear.map.mapbox-util
-  (:require [clojure.tools.reader.edn :as edn]))
+  (:require [clojure.tools.reader.edn :as edn]
+            [globear.messaging.channel :as channel]
+            [cljs.core.async
+             :refer [>! <! go chan buffer close! alts! timeout]]))
 
 
 (defn event->marker [event]
@@ -69,13 +72,14 @@
    :geometry {:type "Point"
               :coordinates [(first coordinates) (second coordinates) 0]}})
 
-;;TODO send the diff (= new marker part) to the server
 (defn- append-marker-to-source [coordinates comment marker-source]
   (let [asJson (.parse js/JSON @marker-source)
         asEdn (js->clj asJson :keywordize-keys true)
         features (:features asEdn)
-        id (inc (count features))]
-    (assoc-in asEdn [:features] (conj features (build-marker coordinates comment id)))))
+        id (inc (count features))
+        new-marker (build-marker coordinates comment id)]
+    (go (>! channel/request-chan {:action :upload :entity :marker :marker new-marker}))
+    (assoc-in asEdn [:features] (conj features new-marker))))
 
 
 (defn add-new-marker-to-source-layer [globear-map coordinates comment marker-source]
