@@ -10,6 +10,7 @@
     [clojure.java.io :as io]
     [cheshire.core :refer [parse-string]]
     [globear-backend.thumbnail-service :as thumbnail-service]
+    [globear-backend.marker.marker-service :as marker-service]
     [ring.middleware.basic-authentication :refer [wrap-basic-authentication]]))
 
 
@@ -45,7 +46,8 @@
 
 (defn- store-marker [req]
   (println (str "Marker received: " req))
-  (str "return this"))
+  (marker-service/save-marker req)
+  (str "OK"))  ;;TODO implement return codes depending on succ/failure
 
 (defroutes handler
            (GET "/" [] "<h1> Globear-backend says hallo!</h1>")
