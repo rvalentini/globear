@@ -63,8 +63,6 @@
       (wrap-file "resources/pictures/")
       (wrap-cors :access-control-allow-origin [#".*"]
                  :access-control-allow-methods [:get :put :post :delete]
-                 :WWW-Authenticate "Basic realm=\"Globear\"")
-      ))
-
+                 :WWW-Authenticate "Basic realm=\"Globear\"")))
 
 (init)
