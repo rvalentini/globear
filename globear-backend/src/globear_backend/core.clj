@@ -9,7 +9,9 @@
     [ring.util.response :refer [response]]
     [clojure.java.io :as io]
     [cheshire.core :refer [parse-string]]
-    [globear-backend.thumbnail-service :as thumbnail-service]
+    [globear-backend.image.image-service :as img-service]
+    [globear-backend.image.thumbnail-generator :as thumbnail-generator]
+    [globear-backend.image.thumbnail-service :as thumbnail-service]
     [globear-backend.marker.marker-service :as marker-service]
     [ring.middleware.basic-authentication :refer [wrap-basic-authentication]]))
 
@@ -17,44 +19,51 @@
 (defn- init []
   (println "Booting globear-backend")
   (println "Checking if there is a thumbnail for every image ...")
-  (thumbnail-service/generate-all-thumbnails))
+  (thumbnail-generator/generate-all-thumbnails))
 
 
+(def greeting "<h1> Globear-backend says hallo!</h1>")
 (def not-found {:status  404
                 :body    "<h1>Page not found</h1>"})
 
 
 (defn- get-picture [id]
-  (let [path (str "resources/pictures/" id ".jpg")]
-    (if
-      (.exists (io/file path))
-      {:status  200
-       :headers {"Content-Type" "image/jpg"
-                 "Cache-Control" "max-age=31536000, private"}
-       :body    (io/input-stream path)}
-      not-found)))
+  (if
+    (img-service/picture-exists? id)
+    {:status  200
+     :headers {"Content-Type" "image/jpg"
+               "Cache-Control" "max-age=31536000, private"}
+     :body    (img-service/load-image-as-stream id)}
+    not-found))
 
 (defn- get-thumbnail [id]
-  (let [path (str "resources/thumbnails/" id "_thumbnail.png")]
-    (if
-      (.exists (io/file path))
-      {:status  200
-       :headers {"Content-Type" "image/png"
-                 "Cache-Control" "max-age=31536000, private"}
-       :body    (io/input-stream path)}
-      not-found)))
+  (if
+    (thumbnail-service/thumbnail-exists? id)
+    {:status  200
+     :headers {"Content-Type"  "image/png"
+               "Cache-Control" "max-age=31536000, private"}
+     :body    (thumbnail-service/load-thumbnail-as-stream id)}
+    not-found))
 
-(defn- store-marker [req]
-  (println (str "Marker received: " req))
-  (marker-service/save-marker req)
+(defn- get-markers[]
+  (marker-service/get-all-markers))
+
+(defn- store-marker [body]
+  (println (str "Marker received: " body))
+  (marker-service/save-marker body)
   (str "OK"))  ;;TODO implement return codes depending on succ/failure
 
+
+(defn- store-picture [body]
+  (println "Picture received!"))
+
 (defroutes handler
-           (GET "/" [] "<h1> Globear-backend says hallo!</h1>")
-           (GET "/geojson" [] (io/input-stream "resources/markers/geojson_markers.json"))
+           (GET "/" [] greeting)
+           (GET "/markers" [] (get-markers))
            (GET "/pictures/:id" [id] (get-picture id))
            (GET "/thumbnails/:id" [id] (get-thumbnail id))
-           (PUT "/marker" {body :body} (store-marker (slurp body)) )
+           (PUT "/markers" {body :body} (store-marker (slurp body)))
+           (PUT "/pictures" {body :body} (store-picture (slurp body)))
            (route/not-found "<h1>Page not found</h1>"))
 
 (def app

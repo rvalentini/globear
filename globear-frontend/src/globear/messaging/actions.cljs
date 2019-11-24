@@ -14,7 +14,7 @@
 
 (defmethod execute [:download :marker] [_]
   (println "Requested all markers from backend")
-  (go (let [response (<! (http/get "http://localhost:3000/geojson" {:with-credentials? false}))]
+  (go (let [response (<! (http/get "http://localhost:3000/markers" {:with-credentials? false}))]
         (>! channel/response-chan {:action :receive :entity :markers :payload (:body response)}))))
 
 
@@ -69,7 +69,7 @@
 
 (defmethod execute [:upload :marker] [message]
   (println "PUT new marker request to server!")
-  (let [url (str "http://localhost:3000/marker")] ;;TODO make URL configurable
+  (let [url (str "http://localhost:3000/markers")] ;;TODO make URL configurable
     (go (let [_ (<! (http/put url
                               {:with-credentials? false
                                :body (:marker message)}))]

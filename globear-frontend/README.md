@@ -7,7 +7,7 @@ Not sure yet what will come out in the end, but it surely will be 'beartastic' ;
 
 ## Usage
 
-The application is using `figwheel.main` for building and dependency management and serves the application by default under port `9500`. Without connection to the Globear-backend server, this will only display an empty map. The application will try to connect to the Globear-backend on startup and request the geo-marker definitions from `http://localhost:3000/geojson`. 
+The application is using `figwheel.main` for building and dependency management and serves the application by default under port `9500`. Without connection to the Globear-backend server, this will only display an empty map. The application will try to connect to the Globear-backend on startup and request the geo-marker definitions from `http://localhost:3000/markers`. 
 
 Clicking on a geo-marker will open a Popup and all additional resources attached to this geo-marker (thumbnails & images) will then be loaded from the backend server. 
 

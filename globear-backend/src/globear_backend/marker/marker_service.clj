@@ -2,9 +2,12 @@
   (:require [globear-backend.marker.file-repository :as repo]))
 
 
-(defn get-all-markers [])
+(defn get-all-markers []
+  (repo/load-markers-as-stream))
+
 (defn get-marker [id])
+
 (defn save-marker [marker]
-  (repo/save-to-file marker))
+  (repo/save-marker-to-file marker))
 
 

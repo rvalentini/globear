@@ -5,17 +5,19 @@
 
 (def path "resources/markers/test.json")  ;;TODO configure the real deal
 
-(defn load-all-from-file []
+
+(defn load-all-markers-from-file []
   (let [file-content (slurp path)
         markers (parse-string file-content)]
     markers))
 
-(defn save-to-file[marker]
-  (let [markers (load-all-from-file)
+
+(defn save-marker-to-file[marker]
+  (let [markers (load-all-markers-from-file)
         updated (update-in markers ["features"] conj (edn/read-string marker))]
     (println "Saving updated markers to file!")
     (spit path (generate-string updated))))
 
-;;TODO use this
-(defn get-input-stream []
+
+(defn load-markers-as-stream []
   (io/input-stream "resources/markers/geojson_markers.json"))
