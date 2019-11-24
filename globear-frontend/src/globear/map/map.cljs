@@ -51,7 +51,13 @@
 
 
 ;TODO make sure not to add marker on top of existing markers
+;TODO find necessary attributes @ https://docs.mapbox.com/mapbox-gl-js/api/#mapmouseevent#type
+;TODO how is it possible to get element right-clicked on Canvas?
 (defn- on-right-click [e]
+
+  ;(let [event (aget e "target")]
+  ;  (println (str "EVENT: " (.stringify js/JSON event))))
+
   ;;TODO close popup here if opened currently
   (let [coordinates [(aget e "lngLat" "lng") (aget e "lngLat" "lat")]
         position [(aget e "point" "x") (aget e "point" "y")]]
