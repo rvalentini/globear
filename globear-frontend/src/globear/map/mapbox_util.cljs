@@ -89,6 +89,10 @@
     (.setData source-layer (clj->js source))))
 
 
+(defn is-click-on-marker [clicked-coordinates marker]
+  ;TODO implement and call from map ns
+  )
+
 (defn zoom-on-clicked-cluster [globear-map event]
   (let [features (.queryRenderedFeatures @globear-map (aget event "point") {:layers ["clusters"]})
         cluster-id (aget features 0 "properties" "cluster_id")

@@ -44,19 +44,37 @@
       (.addTo @globear-map)))
 
 
-
 (defn- on-place-click [e]
   (let [marker (util/event->marker e)]
     (build-picture-popup marker)))
 
 
-;TODO make sure not to add marker on top of existing markers
-;TODO find necessary attributes @ https://docs.mapbox.com/mapbox-gl-js/api/#mapmouseevent#type
-;TODO how is it possible to get element right-clicked on Canvas?
-(defn- on-right-click [e]
+;;TODO find pixel positions of all markers
+;;TODO move to map_utils
+(defn get-current-marker-positions []
 
-  ;(let [event (aget e "target")]
-  ;  (println (str "EVENT: " (.stringify js/JSON event))))
+  (let [source (.getSource @globear-map "markers")]
+    (.log js/console source)
+    )
+
+
+  )
+
+
+
+
+
+
+
+;TODO make sure not to add marker on top of existing markers
+(defn- on-right-click [e]
+  (get-current-marker-positions)
+  (.log js/console e)
+  (let [features (.queryRenderedFeatures @globear-map (clj->js {:layers ["place"]}) )]
+    (.log js/console features)
+    ;;TODO iterate over features (each "lowest-level" Totoro marker) and match event
+    ;;TODO lat,lng with each features lat,lng
+    )
 
   ;;TODO close popup here if opened currently
   (let [coordinates [(aget e "lngLat" "lng") (aget e "lngLat" "lat")]
