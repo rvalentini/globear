@@ -49,32 +49,13 @@
     (build-picture-popup marker)))
 
 
-;;TODO find pixel positions of all markers
-;;TODO move to map_utils
-(defn get-current-marker-positions []
-
-  (let [source (.getSource @globear-map "markers")]
-    (.log js/console source)
-    )
-
-
-  )
-
-
-
-
-
-
 
 ;TODO make sure not to add marker on top of existing markers
 (defn- on-right-click [e]
-  (get-current-marker-positions)
-  (.log js/console e)
-  (let [features (.queryRenderedFeatures @globear-map (clj->js {:layers ["place"]}) )]
-    (.log js/console features)
-    ;;TODO iterate over features (each "lowest-level" Totoro marker) and match event
-    ;;TODO lat,lng with each features lat,lng
+  (let [marker-click (util/is-click-on-marker globear-map e)]
+    (println marker-click)
     )
+
 
   ;;TODO close popup here if opened currently
   (let [coordinates [(aget e "lngLat" "lng") (aget e "lngLat" "lat")]
@@ -103,7 +84,7 @@
 
 (defn- map-init []
   (set! (.-accessToken js/mapboxgl) conf/token)
-  (reset! globear-map (new js/mapboxgl.Map (clj->js {:container "map" :style "mapbox://styles/rival/ck16hxsq50d6n1clhleanmfhl" :center [-3.688495 40.399189], :zoom 10.6})))
+  (reset! globear-map (new js/mapboxgl.Map (clj->js {:container "map" :style "mapbox://styles/rival/ck16hxsq50d6n1clhleanmfhl" :center [-3.688495 40.399189], :zoom 13})))
   (.addControl @globear-map (new js/mapboxgl.NavigationControl))
   (register-listeners))
 

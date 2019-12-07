@@ -89,9 +89,24 @@
     (.setData source-layer (clj->js source))))
 
 
-(defn is-click-on-marker [clicked-coordinates marker]
-  ;TODO implement and call from map ns
-  )
+(defn is-click-on-marker [globear-map click]
+  (let [markers (.queryRenderedFeatures @globear-map (clj->js {:layers ["place"]}) )
+        projection (.project @globear-map (aget click "lngLat"))
+        [px, py] [(aget projection "x") (aget projection "y")]
+        distances (->> markers
+                       (map #(aget % "properties" "coordinates"))
+                       (map #(edn/read-string %))
+                       (map #(.project @globear-map (clj->js %)))
+                       (map #(identity [(aget % "x") (aget % "y")]))
+                       (map #(Math/sqrt
+                               (+
+                                 (Math/pow (- (first %) px) 2)
+                                 (Math/pow (- (second %) py) 2)))))]
+
+    (.log js/console markers)  ;;TODO remove
+    (.log js/console click)
+
+    (some #(<= % 10) distances)))
 
 (defn zoom-on-clicked-cluster [globear-map event]
   (let [features (.queryRenderedFeatures @globear-map (aget event "point") {:layers ["clusters"]})
