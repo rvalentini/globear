@@ -30,8 +30,8 @@
                                     :type "symbol"
                                     :source "markers"
                                     :filter ["!" ["has" "point_count"]]
-                                    :layout {:icon-image "totoro"
-                                             :icon-size 0.1}})))
+                                    :layout {:icon-image "bear_scaled"
+                                             :icon-size 0.2}})))
 
 
 (defn add-cluster-layer-to-map [globear-map]
@@ -89,24 +89,35 @@
     (.setData source-layer (clj->js source))))
 
 
+(defn extract-distances-to-click [globear-map markers click]
+  (let [projection (.project @globear-map (aget click "lngLat"))
+        [px, py] [(aget projection "x") (aget projection "y")]]
+    (->> markers
+         (map #(aget % "properties" "coordinates"))
+         (map #(edn/read-string %))
+         (map #(.project @globear-map (clj->js %)))
+         (map #(identity [(aget % "x") (aget % "y")]))
+         (map #(Math/sqrt
+                 (+
+                   (Math/pow (- (first %) px) 2)
+                   (Math/pow (- (second %) py) 2)))))))
+
+
 (defn is-click-on-marker [globear-map click]
   (let [markers (.queryRenderedFeatures @globear-map (clj->js {:layers ["place"]}) )
-        projection (.project @globear-map (aget click "lngLat"))
-        [px, py] [(aget projection "x") (aget projection "y")]
-        distances (->> markers
-                       (map #(aget % "properties" "coordinates"))
-                       (map #(edn/read-string %))
-                       (map #(.project @globear-map (clj->js %)))
-                       (map #(identity [(aget % "x") (aget % "y")]))
-                       (map #(Math/sqrt
-                               (+
-                                 (Math/pow (- (first %) px) 2)
-                                 (Math/pow (- (second %) py) 2)))))]
+        distances (extract-distances-to-click globear-map markers click)]
+    (some #(<= % 35) distances)))
 
-    (.log js/console markers)  ;;TODO remove
-    (.log js/console click)
 
-    (some #(<= % 10) distances)))
+(defn get-closest-marker-id [globear-map click]
+  (let [markers (.queryRenderedFeatures @globear-map (clj->js {:layers ["place"]}) )
+        ids (->> markers
+                 (map #(aget % "properties" "id")))
+        distances (extract-distances-to-click globear-map markers click)
+        ids-with-distances (map vector ids distances)]
+
+        (first (first (sort-by #(second %) ids-with-distances)))))
+
 
 (defn zoom-on-clicked-cluster [globear-map event]
   (let [features (.queryRenderedFeatures @globear-map (aget event "point") {:layers ["clusters"]})

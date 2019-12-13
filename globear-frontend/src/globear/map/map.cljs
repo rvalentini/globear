@@ -5,7 +5,8 @@
             [globear.map.mapbox-util :as util]
             [globear.messaging.channel :as channel]
             [globear.map.mapbox-config :as conf]
-            [globear.map.context-menu :as menu]
+            [globear.map.context-menu :as context-menu]
+            [globear.map.marker-menu :as marker-menu]
             [cljs.core.async
              :refer [>! <! go chan buffer close! alts! timeout]]))
 
@@ -22,6 +23,14 @@
                  :position {:x 0 :y 0}
                  :coordinates {:lat 0 :lng 0}}))
 
+(def marker-menu-state
+  (reagent/atom {:visible false
+                 :position {:x 0 :y 0}
+                 :coordinates {:lat 0 :lng 0}}))
+
+(def picture-popup-state
+  (reagent/atom {:popup nil}))
+
 
 ;TODO move to image-overlay
 (defn- expand-picture [src]
@@ -33,15 +42,18 @@
   ;;request each picture from the backend-server
   (doseq [picture (:pictures marker)]
     (go (>! channel/request-chan {:action :download :entity :thumbnail :id picture})))
-  (-> (new js/mapboxgl.Popup (clj->js {:offset 25}))
-      (.setLngLat (clj->js {:lng (nth  (:coordinates marker) 0) :lat (nth (:coordinates marker) 1)}))
-      (.setDOMContent
-        (hipo/create [:div (for [src (:pictures marker)]
-                             [:img {:id src
-                                    :class "custom-popup-item"
-                                    :src "totoro_loading.png"
-                                    :on-click #(expand-picture src)}])]))
-      (.addTo @globear-map)))
+
+  (let [popup (new js/mapboxgl.Popup (clj->js {:offset 25}))]
+    (-> popup
+        (.setLngLat (clj->js {:lng (nth  (:coordinates marker) 0) :lat (nth (:coordinates marker) 1)}))
+        (.setDOMContent
+          (hipo/create [:div (for [src (:pictures marker)]
+                               [:img {:id src
+                                      :class "custom-popup-item"
+                                      :src "totoro_loading.png"
+                                      :on-click #(expand-picture src)}])]))
+        (.addTo @globear-map))
+        (swap! picture-popup-state assoc :popup popup )))
 
 
 (defn- on-place-click [e]
@@ -49,18 +61,20 @@
     (build-picture-popup marker)))
 
 
-
-;TODO make sure not to add marker on top of existing markers
 (defn- on-right-click [e]
-  (let [marker-click (util/is-click-on-marker globear-map e)]
-    (println marker-click)
-    )
-
-
-  ;;TODO close popup here if opened currently
-  (let [coordinates [(aget e "lngLat" "lng") (aget e "lngLat" "lat")]
+  (let [marker-clicked (util/is-click-on-marker globear-map e)
+        closest-marker (util/get-closest-marker-id globear-map e)
+        coordinates [(aget e "lngLat" "lng") (aget e "lngLat" "lat")]
         position [(aget e "point" "x") (aget e "point" "y")]]
-    (menu/open-context-menu coordinates position context-menu-state)))
+
+    (marker-menu/close marker-menu-state)
+    (context-menu/close context-menu-state)
+
+    (if (:popup @picture-popup-state) (.remove (:popup @picture-popup-state)))
+
+    (if marker-clicked
+      (marker-menu/open coordinates position marker-menu-state)
+      (context-menu/open coordinates position context-menu-state))))
 
 
 (defn add-markers-source-to-map [geojson]
@@ -71,7 +85,7 @@
 (defn- on-map-load []
   (println "Map loaded!")
   ;;TODO Totoro not loaded fast enough? On inital map-load -> only number appearing
-  (.loadImage @globear-map "totoro.png" #(.addImage @globear-map "totoro" %2))
+  (.loadImage @globear-map "bear_scaled.png" #(.addImage @globear-map "bear_scaled" %2))
   (.loadImage @globear-map "totoro_cluster.png" #(.addImage @globear-map "totoro-cluster" %2))
   (go (>! channel/request-chan {:action :download :entity :marker})))
 
@@ -79,7 +93,8 @@
   (.on @globear-map "load" #(on-map-load))
   (.on @globear-map "click" "place" #(on-place-click %))
   (.on @globear-map "contextmenu" #(on-right-click %))
-  (.on @globear-map "click" #(menu/close-context-menu context-menu-state))
+  (.on @globear-map "click" #(do (context-menu/close context-menu-state)
+                                 (marker-menu/close marker-menu-state)))
   (.on @globear-map "click" "clusters" #(util/zoom-on-clicked-cluster globear-map %1)))
 
 (defn- map-init []
@@ -94,9 +109,13 @@
    [:div#map]
    (if (true? (:visible @img-overlay-state)) [img/picture-overlay
                                               img-overlay-state])
-   (if (true? (:visible @context-menu-state)) [menu/context-menu
+   (if (true? (:visible @context-menu-state)) [context-menu/context-menu
                                                context-menu-state
                                                util/add-new-marker-to-source-layer
+                                               globear-map
+                                               marker-source])
+   (if (true? (:visible @marker-menu-state)) [marker-menu/marker-menu
+                                               marker-menu-state
                                                globear-map
                                                marker-source])])
 

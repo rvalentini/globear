@@ -1,5 +1,5 @@
 .marker {
-    background-image: url('totoro.png');
+    background-image: url('bear_scaled.png');
     background-size: cover;
     width: 31px;
     height: 40px;
@@ -33,7 +33,7 @@
     align-self: center;
 }
 
-.context-menu {
+.menu {
     position: absolute;
     /*width: 100px;
     height: 20px;
@@ -42,26 +42,27 @@
     background: green;*/
 }
 
-.context-menu ul {
+.menu ul {
     margin: 0;
     padding: 0;
-    width:185px;
+    width:200px;
     list-style-type: none;
 }
 
-.context-menu ul li a {
+.menu ul li a {
     text-decoration: none;
-    color: white;
+    color: black;
     padding: 10.5px 11px;
-    background-color: #2a1a5e;
+    background-color: #AAAAAA;
+    font-size: 25px;
     display:block;
 }
 
-.context-menu ul li a:visited {
+.menu ul li a:visited {
     color: white;
 }
 
-.context-menu ul li a:hover, .menu_simple ul li .current {
+.menu ul li a:hover, .menu_simple ul li .current {
     color: white;
     background-color: #fb9224;
 }
