@@ -6,10 +6,6 @@
 
 
 (defn event->marker [event]
-  ;;TODO find better mor generic solution for the js->cljs transpiling problem
-  ;;TODO insight: there is some map-box specific element on the same hierarchy level as "properties",
-  ;;TODO probably something within _vectorTileFeature, which causes the js->cljs transpiling to fail
-  ;;TODO maybe it's an encoding problem?
   (let [raw (js->clj (aget event "features" 0 "properties"))]
     {:coordinates (edn/read-string (get-in  raw ["coordinates"]))
      :pictures (edn/read-string (get-in  raw ["pictures"]))
@@ -17,12 +13,6 @@
      :comment (get-in raw ["comment"])}))
 
 
-(defn init-map-with-source [globear-map source]
-  (do
-    (add-source-layer-to-map globear-map source)
-    (add-cluster-layer-to-map globear-map)
-    (add-item-count-layer-to-map globear-map)
-    (add-place-symbol-layer-to-map globear-map)))
 
 
 (defn add-place-symbol-layer-to-map [globear-map]
@@ -31,7 +21,7 @@
                                     :source "markers"
                                     :filter ["!" ["has" "point_count"]]
                                     :layout {:icon-image "bear_scaled"
-                                             :icon-size 0.2}})))
+                                             :icon-size 0.15}})))
 
 
 (defn add-cluster-layer-to-map [globear-map]
@@ -61,6 +51,13 @@
                                                :cluster true
                                                :clusterMaxZoom 14
                                                :clusterRadius 50})))
+
+(defn init-map-with-source [globear-map source]
+  (do
+    (add-source-layer-to-map globear-map source)
+    (add-cluster-layer-to-map globear-map)
+    (add-item-count-layer-to-map globear-map)
+    (add-place-symbol-layer-to-map globear-map)))
 
 
 (defn- build-marker [coordinates comment id]

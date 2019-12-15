@@ -7,7 +7,6 @@
 }
 
 .mapboxgl-popup {
-    /*max-width: 200px; */
 }
 
 .mapboxgl-popup-close-button {
@@ -28,24 +27,18 @@
 
 .custom-popup-item {
     margin: 2px;
-    /*width: 200px;*/
     height: 100px;
     align-self: center;
 }
 
 .menu {
     position: absolute;
-    /*width: 100px;
-    height: 20px;
-    top: 50px;
-    left: 50px;
-    background: green;*/
 }
 
 .menu ul {
     margin: 0;
     padding: 0;
-    width:200px;
+    width:150px;
     list-style-type: none;
 }
 
@@ -54,7 +47,7 @@
     color: black;
     padding: 10.5px 11px;
     background-color: #AAAAAA;
-    font-size: 25px;
+    font-size: 20px;
     display:block;
 }
 
