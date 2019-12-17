@@ -29,8 +29,8 @@
                                     :type "symbol"
                                     :source "markers"
                                     :filter  [">" ["get" "point_count"] 0]
-                                    :layout {:icon-image "totoro-cluster"
-                                             :icon-size 0.1
+                                    :layout {:icon-image "bear_cluster"
+                                             :icon-size 0.11
                                              :icon-allow-overlap true}})))
 
 
@@ -42,7 +42,7 @@
                                     :layout {:text-field "{point_count_abbreviated}"
                                              :text-font ["DIN Offc Pro Medium" "Arial Unicode MS Bold"]
                                              :text-size 20
-                                             :text-offset [0.6 -1.1] } }) ))
+                                             :text-offset [0.65 -1.25] } }) ))
 
 
 (defn add-source-layer-to-map [globear-map geojson]

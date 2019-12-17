@@ -63,7 +63,7 @@
 (defn- on-map-load []
   (println "Map loaded!")
   (.loadImage @globear-map "bear_scaled.png" #(.addImage @globear-map "bear_scaled" %2))
-  (.loadImage @globear-map "totoro_cluster.png" #(.addImage @globear-map "totoro-cluster" %2))
+  (.loadImage @globear-map "bear_cluster_scaled.png" #(.addImage @globear-map "bear_cluster" %2))
   (go (>! channel/request-chan {:action :download :entity :marker})))
 
 (defn- register-listeners []
