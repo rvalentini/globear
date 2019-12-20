@@ -15,6 +15,7 @@
        (filter #(string/includes? % ".jpg"))
        (map #(subs % 0 (- (count %) 4)))))
 
+
 (defn- resize-image
   "Resized the given image to fixed a fixed height (defined above) and recalculates the height
   to keep the image"
@@ -23,12 +24,14 @@
   (let [calculated-dimension (/ (* (long height) (img/width src-image)) (img/height src-image))]
     (img/resize src-image calculated-dimension height)))
 
+
 (defn- generate-thumbnail [id]
   (println (str "Generating thumbnail for " id))
   (-> id
       (load-image-from-file)
       (resize-image)
       (save-thumbnail-to-file id)))
+
 
 (defn generate-all-thumbnails []
   (loop [pictures (walk-path)

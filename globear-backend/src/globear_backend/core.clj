@@ -25,37 +25,51 @@
 (def greeting "<h1> Globear-backend says hallo!</h1>")
 (def not-found {:status  404
                 :body    "<h1>Page not found</h1>"})
+(def internal-error {:status 500
+                     :body "<h1>Internal Server Error</h1>"})
 
 
 (defn- get-picture [id]
-  (if
-    (img-service/picture-exists? id)
-    {:status  200
-     :headers {"Content-Type" "image/jpg"
-               "Cache-Control" "max-age=31536000, private"}
-     :body    (img-service/load-image-as-stream id)}
+  (if (img-service/picture-exists? id)
+    (let [input-stream (img-service/load-image-as-stream id)]
+      (if input-stream
+        {:status  200
+         :headers {"Content-Type" "image/jpg"
+                   "Cache-Control" "max-age=31536000, private"}
+         :body    input-stream}
+        internal-error))
     not-found))
 
+
 (defn- get-thumbnail [id]
-  (if
-    (thumbnail-service/thumbnail-exists? id)
-    {:status  200
-     :headers {"Content-Type"  "image/png"
-               "Cache-Control" "max-age=31536000, private"}
-     :body    (thumbnail-service/load-thumbnail-as-stream id)}
+  (if (thumbnail-service/thumbnail-exists? id)
+    (let [input-stream (thumbnail-service/load-thumbnail-as-stream id)]
+      (if input-stream
+        {:status  200
+         :headers {"Content-Type"  "image/png"
+                   "Cache-Control" "max-age=31536000, private"}
+         :body input-stream}
+        internal-error))
     not-found))
 
 (defn- get-markers[]
-  (marker-service/get-all-markers))
+  (let [input-stream (marker-service/get-all-markers)]
+    (if input-stream
+      input-stream
+      internal-error)))
+
 
 (defn- store-marker [body]
   (println (str "Marker received: " body))
-  (marker-service/save-marker body)
-  (str "OK"))  ;;TODO implement return codes depending on succ/failure
+  (let [possible-error (marker-service/save-marker body)]
+    (if possible-error
+      internal-error
+      "OK")))
 
 
 (defn- store-picture [body]
   (println "Picture received!"))
+
 
 (defroutes handler
            (GET "/" [] greeting)

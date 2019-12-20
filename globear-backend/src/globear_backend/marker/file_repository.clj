@@ -1,9 +1,10 @@
 (ns globear-backend.marker.file-repository
   (:require [clojure.java.io :as io]
             [cheshire.core :refer :all]
-            [clojure.edn :as edn]))
+            [clojure.edn :as edn])
+  (:import (java.io  IOException)))
 
-(def path "resources/markers/test.json")  ;;TODO configure the real deal
+(def path "resources/markers/geojson_markers.json")
 
 
 (defn load-all-markers-from-file []
@@ -13,11 +14,18 @@
 
 
 (defn save-marker-to-file[marker]
-  (let [markers (load-all-markers-from-file)
-        updated (update-in markers ["features"] conj (edn/read-string marker))]
-    (println "Saving updated markers to file!")
-    (spit path (generate-string updated))))
+  (try
+    (let [markers (load-all-markers-from-file)
+          updated (update-in markers ["features"] conj (edn/read-string marker))]
+      (println "Saving updated markers to file!")
+      (spit path (generate-string updated)))
+    (catch IOException ex
+      (println (str "ERROR: Could not save markers to file: " ex))
+      ex)))
 
 
 (defn load-markers-as-stream []
-  (io/input-stream "resources/markers/geojson_markers.json"))
+  (try
+    (io/input-stream "resources/markers/geojson_markers.json")
+    (catch IOException ex
+      (println (str "ERROR: Could not load markers from file: " ex)))))

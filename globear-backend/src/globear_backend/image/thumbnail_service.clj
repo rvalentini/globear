@@ -1,6 +1,7 @@
 (ns globear-backend.image.thumbnail-service
   (:require [mikera.image.core :as img]
-            [clojure.java.io :as io]))
+            [clojure.java.io :as io])
+  (:import (java.io IOException)))
 
 
 (defn thumbnail-exists? [id]
@@ -15,7 +16,10 @@
 
 (defn load-thumbnail-as-stream [id]
   (let [path (str "resources/thumbnails/" id "_thumbnail.png")]
-    (io/input-stream path)))
+    (try
+      (io/input-stream path)
+      (catch IOException ex
+        (println (str "ERROR: Could not load thumbnail from file: " ex))))))
 
 
 

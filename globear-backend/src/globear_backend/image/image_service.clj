@@ -1,7 +1,8 @@
 (ns globear-backend.image.image-service
   (:require [clojure.java.io :refer [file]]
             [mikera.image.core :as img]
-            [clojure.java.io :as io]))
+            [clojure.java.io :as io])
+  (:import (java.io IOException)))
 
 
 
@@ -17,7 +18,12 @@
 
 (defn load-image-as-stream [id]
   (let [path (str "resources/pictures/" id ".jpg")]
-    (io/input-stream path)))
+    (try
+      (io/input-stream path)
+      (catch IOException ex
+        (println (str "ERROR: Could not load image from file: " ex))))))
 
 
-(defn save-image-to-file [])
+(defn save-image-to-file []
+  ;TODO implement
+  )
