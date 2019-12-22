@@ -1,7 +1,7 @@
 # Globear
 
 <p align="center">
-  <img src="/globear-frontend/resources/public/totoro_loading.png" width="100" title="hover text">
+  <img src="/globear-frontend/resources/public/bear.png" width="100" title="Globear">
 </p>
 
 A 'beartastic' image viewer application written in Clojure/ClojureScript using Mapbox GL JS. 
@@ -18,8 +18,10 @@ In case you have any questions/advice/suggestions/feature-requests/rants, please
 Travel the world and see all the things! 
 
 <p align="center">
-  <img src="/globear-frontend/resources/public/screenshot_marker.png" width="350" title="Cluster Marker View">
   <img src="/globear-frontend/resources/public/screenshot_popup.png" width="350" title="Popup Overlay View">
+  <img src="/globear-frontend/resources/public/screenshot_marker_1.png" width="350" title="Map Marker View Zoom-in">
+  <img src="/globear-frontend/resources/public/screenshot_marker_2.png" width="350" title="Map Marker View Zoom-out">
+
 </p>
 
 ## Specs
@@ -37,11 +39,12 @@ For usage instructions of the application, see the README files in the respectiv
 
 Current state of Globear now includes the following features:
 
-* Totoro-themed geo-markers :D
+* Awsome bear-themed geo-markers :D 
 * Marker popups display thumbnail presentation of the pictures
 * Full-screen picture overlay with lazy loading from backend
-* Cluster-markers with Totoro-themed size indicators for lower zoom steps
-* Automatic thumbnail generation in the backend on startup
+* Cluster-markers with bear-themed size indicators for lower zoom steps
+* Automatic thumbnail generation in the backend on startup of the app
+* New markers can be added via right-click on the map
 
 ## TODO
 
@@ -49,12 +52,13 @@ Current state of Globear now includes the following features:
 2. ~~[Frontend/Backend] make sure resources are cached properly~~
 3. ~~[Frontend] Correct picture orientations (try to parse meta-data using exif-processor)~~
 4. ~~[Frontend] introduce Cluster-Marker~~
-5. [Backend] Nicer Error handling for IO Exceptions
-6. [Frontend] Switch to new Globear icons
+5. ~~[Backend] Nicer Error handling for IO Exceptions~~
+6. ~~[Frontend] Switch to new Globear icons~~
 7. ~~[Mapbox] try out different map styles~~ 
 8. [Backend] make AWS deployable
 9. [Frontend] feature: upload pictures and set markers 
-10. [Frontend] feature: new marker types -> restaurant / text / etc 
+10. [Frontend] feature: new marker types -> restaurant / text / etc
+11. [Frontend] feature: more context functionality for right-click on marker 
 
 ## License
 Copyright © 2019 Riccardo Valentini
