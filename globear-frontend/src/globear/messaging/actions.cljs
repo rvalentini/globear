@@ -5,11 +5,12 @@
             [cljs-http.client :as http]
             [cognitect.transit :as transit]))
 
+
 (def reader (transit/reader :json))
+
 
 (defmulti execute
           (fn [x] [(:action x) (:entity x)]))
-
 
 
 (defmethod execute [:download :marker] [_]
@@ -25,6 +26,7 @@
                                      {:with-credentials? false}))]
           (>! channel/response-chan {:action :receive :entity :picture :id (:id message) :url url})))))
 
+
 (defmethod execute [:download :thumbnail] [message]
   (println "Requested thumbnail from backend")
   (let [url (str "http://localhost:3000/thumbnails/" (:id message))] ;;TODO make URL configurable
@@ -33,10 +35,9 @@
           (>! channel/response-chan {:action :receive :entity :thumbnail :id (:id message) :url url})))))
 
 
-
-
 (defmethod execute [:receive :markers] [message]
   (map/add-markers-source-to-map (:payload message) ))
+
 
 (defmethod execute [:receive :picture] [message]
   (let [interval (atom nil)]
@@ -51,6 +52,7 @@
                                  (.-src)
                                  (set! (:url message))))))
                        10))))
+
 
 (defmethod execute [:receive :thumbnail] [message]
   (let [interval (atom nil)]

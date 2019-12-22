@@ -12,5 +12,4 @@
   (app-init)
   [map/map-component])
 
-
 (reagent/render [app] (js/document.querySelector "#cljs-target"))

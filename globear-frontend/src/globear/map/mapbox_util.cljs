@@ -13,8 +13,6 @@
      :comment (get-in raw ["comment"])}))
 
 
-
-
 (defn add-place-symbol-layer-to-map [globear-map]
   (.addLayer @globear-map (clj->js {:id "place"
                                     :type "symbol"

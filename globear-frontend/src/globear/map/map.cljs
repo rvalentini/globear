@@ -1,6 +1,5 @@
 (ns globear.map.map
   (:require [reagent.core :as reagent]
-            [hipo.core :as hipo]
             [globear.map.picture-overlay :as img]
             [globear.map.mapbox-util :as util]
             [globear.messaging.channel :as channel]
@@ -8,6 +7,7 @@
             [globear.map.context-menu :as context-menu]
             [globear.map.marker-menu :as marker-menu]
             [globear.map.map-state :as state]
+            [globear.map.popup :as popup]
             [cljs.core.async
              :refer [>! <! go chan buffer close! alts! timeout]]))
 
@@ -15,28 +15,9 @@
 (def globear-map (reagent/atom nil))
 
 
-;TODO move to separate namespace
-(defn- build-picture-popup [marker]
-  ;;request each picture from the backend-server
-  (doseq [picture (:pictures marker)]
-    (go (>! channel/request-chan {:action :download :entity :thumbnail :id picture})))
-
-  (let [popup (new js/mapboxgl.Popup (clj->js {:offset 30}))]
-    (-> popup
-        (.setLngLat (clj->js {:lng (nth  (:coordinates marker) 0) :lat (nth (:coordinates marker) 1)}))
-        (.setDOMContent
-          (hipo/create [:div (for [src (:pictures marker)]
-                               [:img {:id src
-                                      :class "custom-popup-item"
-                                      :src "totoro_loading.png"
-                                      :on-click #(img/expand-picture src)}])]))
-        (.addTo @globear-map))
-        (swap! state/picture-popup-state assoc :popup popup )))
-
-
 (defn- on-place-click [e]
   (let [marker (util/event->marker e)]
-    (build-picture-popup marker)))
+    (popup/open-marker-popup globear-map marker)))
 
 
 (defn- on-right-click [e]
