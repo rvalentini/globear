@@ -60,5 +60,10 @@ Current state of Globear now includes the following features:
 10. [Frontend] feature: new marker types -> restaurant / text / etc
 11. [Frontend] feature: more context functionality for right-click on marker 
 
+## Design
+
+A big thanks for designing the globear icon goes to Anastasiia Bloshchytska. 
+You can find more of her awsome works [here](https://www.instagram.com/kirikia/)
+
 ## License
 Copyright © 2019 Riccardo Valentini
