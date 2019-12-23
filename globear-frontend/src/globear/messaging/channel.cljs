@@ -7,8 +7,7 @@
 (def request-chan
   "The request-chan channel is used for all communication from frontend to backend.
   Action.cljs defines all possible actions that can be pushed into this channel.
-  Every message inserted is picked up by the request-worker (defined in messaging.service.cljs)
-  and executed asynchronously. "
+  Every message inserted is picked up by the request-worker (defined in messaging.service.cljs)"
   (chan))
 
 (def response-chan

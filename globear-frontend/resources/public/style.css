@@ -1,5 +1,5 @@
 .marker {
-    background-image: url('totoro.png');
+    background-image: url('bear_scaled.png');
     background-size: cover;
     width: 31px;
     height: 40px;
@@ -7,7 +7,10 @@
 }
 
 .mapboxgl-popup {
-    /*max-width: 200px; */
+}
+
+.mapboxgl-popup-close-button {
+    display: none;
 }
 
 .mapboxgl-popup-content {
@@ -24,10 +27,41 @@
 
 .custom-popup-item {
     margin: 2px;
-    /*width: 200px;*/
     height: 100px;
     align-self: center;
 }
+
+.menu {
+    position: absolute;
+}
+
+.menu ul {
+    margin: 0;
+    padding: 0;
+    width:150px;
+    list-style-type: none;
+}
+
+.menu ul li a {
+    text-decoration: none;
+    color: black;
+    padding: 10.5px 11px;
+    background-color: #AAAAAA;
+    font-size: 20px;
+    display:block;
+}
+
+.menu ul li a:visited {
+    color: white;
+}
+
+.menu ul li a:hover, .menu_simple ul li .current {
+    color: white;
+    background-color: #fb9224;
+}
+
+
+
 
 .img-fullscreen-overlay {
     background-color: black;

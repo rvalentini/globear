@@ -3,6 +3,7 @@
             [globear.messaging.channel :as channels]
             [globear.messaging.actions :as actions]))
 
+
 (defn request-worker []
   (println "Starting request worker...")
   (go (while true
