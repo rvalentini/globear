@@ -4,13 +4,14 @@
   <img src="/globear-frontend/resources/public/bear.png" width="100" title="Globear">
 </p>
 
-A 'beartastic' image viewer application written in Clojure/ClojureScript using Mapbox GL JS. 
+A 'beartastic' image viewer application written in Clojure/ClojureScript using Mapbox GL JS and Reagent. 
 
 I started to work on this application with the goal to have my own personalized, highly customized travel/blog/food-guide/photo-diary/stuff-my-parents-would-like-to-see application and also to learn more about programming in Clojure and Clojurescript. The application is not anywhere near complete at the moment, but already provides enough features to be used as a geospatial image viewer. I am of course working relentlessly on creating new features for Globear and you can see a rough outline of the things to come in the TODO section below. 
 
-in this project I managed to combine two of my interests:
+in this project I managed to combine three of my interests:
 1. Programming Clojure
 2. Traveling 
+3. Taking some touristy snapshots with my mobile phone
 
 
 In case you have any questions/advice/suggestions/feature-requests/rants, please feel free to contanct me. 
@@ -62,7 +63,7 @@ Current state of Globear now includes the following features:
 
 ## Design
 
-A big thanks for designing the globear icon goes to Anastasiia Bloshchytska. 
+A big thanks for designing the globear icon goes to Kirikia. 
 You can find more of her awsome works [here](https://www.instagram.com/kirikia/)
 
 ## License

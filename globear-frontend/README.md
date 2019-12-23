@@ -1,8 +1,8 @@
 # Globear-frontend
 
-A ClojureScript image viewer application based on Mapbox GL JS.
-This front end 
-which is intended as travel-blog/photo album/foodie-guide. 
+A ClojureScript image viewer application based on Mapbox GL JS and Reagent.
+This application is intended as travel-blog/photo album/foodie-guide, 
+which should make it fun to organize your travel snapshots from all around the world.
 Not sure yet what will come out in the end, but it surely will be 'beartastic' ;)
 
 ## Usage
@@ -17,7 +17,7 @@ Old version using `lein-figwheel` (deprecated!): \
 ~~Compile & run ClojureScript application ```lein figwheel```~~ \
 
 New version using figwheel.main: \
-Run dev application server with REPL: ```clojure -m figwheel.main --build globear --repl ``` \
+Run dev application server with REPL: ```clojure -m figwheel.main --build dev --repl ``` \
 Close REPL again :) ```:cljs/quit```
 
 In order to run the application locally, you need to provide a Mapbox access token to be able to call 
@@ -37,7 +37,8 @@ and add your access token to the file:
 * ~~Come up with a reasonable data structure for markers and contained pictures~~
 * ~~Introduce cluster markers~~
 * feature: integrate 'food-guide' functionality
-* feature: set new geo-marker on the map and upload additional pictures / content
+* feature: ~~set new geo-marker on the map~~ and upload additional pictures / content
+* feature: add delete/update functionality to geo-markers
 
 
 ## License
