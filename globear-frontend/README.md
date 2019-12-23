@@ -20,14 +20,17 @@ New version using figwheel.main: \
 Run dev application server with REPL: ```clojure -m figwheel.main --build dev --repl ``` \
 Close REPL again :) ```:cljs/quit```
 
-In order to run the application locally, you need to provide a Mapbox access token to be able to call 
+In order to run the application locally, you need to provide a Mapbox access token and custom map style to be able to call 
 the Mapbox API. Inside the ```/globear/map/``` module, create a file called ```mapbox_config.cljs```
 and add your access token to the file:
 
 ```clojure
 (def token "[YOUR ACCESS TOKEN]")
 ```
-
+Afterwards, exchange the configured mapbox style with your own: 
+```clojure
+ {:container "map" :style "[YOUR MAPBOX STYLE]" :center [-3.688495 40.399189], :zoom 13}
+```
 
 ## TODO 
 * ~~Introduce Totoro-themed markers to the map~~

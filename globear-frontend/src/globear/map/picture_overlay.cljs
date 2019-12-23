@@ -18,6 +18,6 @@
           :on-click #(close-picture-overlay state) }]])
 
 
-(defn- expand-picture [src]
+(defn expand-picture [src]
   (go (>! channel/request-chan {:action :download :entity :picture :id src}))
   (swap! state/img-overlay-state assoc :visible true))

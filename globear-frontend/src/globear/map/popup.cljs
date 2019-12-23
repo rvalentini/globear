@@ -6,7 +6,7 @@
             [globear.map.map-state :as state]))
 
 
-(defn- open-marker-popup [globear-map marker]
+(defn open-marker-popup [globear-map marker]
   ;;request each thumbnail for this marker popup from backend-server
   (doseq [picture (:pictures marker)]
     (go (>! chan/request-chan {:action :download :entity :thumbnail :id picture})))
