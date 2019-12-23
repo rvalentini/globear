@@ -17,4 +17,5 @@ pom.xml.asc
 *_thumbnail.png
 *_thumbnail.jpg
 *.jpg
+pictures/
 mapbox_config.cljs
